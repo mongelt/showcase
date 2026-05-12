@@ -1,0 +1,3 @@
+# Custom Style implementations
+# Each custom style will be in its own file (e.g., Font.tsx)
+# Follow pattern from docs/blocknote-documentation/examples/06-custom-schema/03-font-style/src/Font.tsx

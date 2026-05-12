@@ -1,0 +1,178 @@
+/* ============================================================
+   Audio Block Styles — Design System Visuals
+   Colors: --accent-light #6B2A2A, --bg-card #E9E3E0, --border-card #b8b0aa
+   Fonts:  --font-ui (Space Grotesk), --font-body (Public Sans)
+   ============================================================ */
+
+/* ---- URL / Upload Input State ---- */
+
+.bn-audio-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 2px dashed var(--border-card, #b8b0aa);
+  border-radius: 8px;
+  background: var(--bg-card, #E9E3E0);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.bn-audio-input-icon {
+  color: var(--border-card, #b8b0aa);
+  flex-shrink: 0;
+}
+
+.bn-audio-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  color: var(--text-body, #1a1a1a);
+  min-width: 0;
+}
+
+
+.bn-audio-input::placeholder {
+  color: var(--border-card, #b8b0aa);
+}
+
+.bn-audio-input-btn {
+  padding: 5px 14px;
+  background: var(--accent-light, #6B2A2A);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.bn-audio-input-btn:hover {
+  background: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-audio-upload-btn {
+  padding: 5px 14px;
+  background: #7c7c7c;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.bn-audio-upload-btn:hover {
+  background: #6c6c6c;
+}
+
+/* ---- Block Container (preview + renderer) ---- */
+
+.bn-audio-block {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  background: transparent;
+  border: 1px solid var(--border-card, #b8b0aa);
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover lift — renderer mode only (editor has the select overlay) */
+.editor-renderer .bn-audio-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- Waveform container (wavesurfer injects a canvas here) ---- */
+
+.bn-audio-waveform {
+  width: 100%;
+  border-radius: 4px;
+  background: var(--bg-main, #c7c7c2);
+  overflow: hidden;
+}
+
+/* ---- Loading state ---- */
+
+.bn-audio-loading {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 0.875rem;
+  color: var(--text-metadata, #5a5a5a);
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* ---- Controls ---- */
+
+.bn-audio-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+  z-index: 6; /* above the select overlay (z-index: 5) */
+}
+
+.bn-audio-controls button {
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--accent-light, #6B2A2A);
+  border: 1px solid var(--accent-light, #6B2A2A);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.bn-audio-controls button:hover:not(:disabled) {
+  background: rgba(107, 42, 42, 0.1);
+  border-color: var(--accent-emerald-300, #A85A5A);
+  color: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-audio-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---- Caption ---- */
+
+.bn-audio-caption {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 0.875rem;
+  color: var(--text-metadata, #5a5a5a);
+  text-align: center;
+  margin: 10px 0 0;
+  padding: 0;
+  position: relative;
+  z-index: 6; /* above overlay */
+}
+
+/* ---- Invisible select overlay (editor mode only) ----
+   Sits on top of the waveform canvas so clicks on the waveform
+   trigger selectBlock() and show the formatting toolbar.
+   Controls sit at z-index 6 above this overlay. */
+
+.bn-audio-select-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}

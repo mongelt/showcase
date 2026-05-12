@@ -1,0 +1,354 @@
+/* ============================================================
+   BlockNote Theme — Design System Overrides
+   Applies the portfolio design system to all BlockNote native blocks.
+   Imported by both BlockNoteEditor and BlockNoteRenderer.
+
+   Design tokens:
+     --font-display  → Crimson Pro  (headings, image captions, link title)
+     --font-body     → Public Sans  (body text, lists, quotes, descriptions)
+     --font-ui       → Space Grotesk (table headers, code language label)
+     --font-mono     → JetBrains Mono (code blocks, inline code)
+     --accent-light        #6B2A2A  (links, bullets, markers, borders)
+     --accent-emerald-300  #A85A5A  (hover states)
+     --text-headings       #111111
+     --text-body           #1a1a1a
+     --text-secondary      #4a4a4a
+     --text-metadata       #5a5a5a
+     --bg-card             #E9E3E0
+     --border-card         #b8b0aa
+   ============================================================ */
+
+/* ── Background overrides — remove BlockNote/Mantine default dark bg ── */
+
+/* Renderer (read-only): fully transparent */
+.bn-container,
+.bn-editor,
+.bn-editor[contenteditable="false"],
+.editor-renderer .bn-container,
+.editor-renderer .bn-editor {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Editor (editable): use bg-main to match the content reader */
+.bn-editor[contenteditable="true"],
+.bn-container:has(.bn-editor[contenteditable="true"]) {
+  background: #c7c7c2 !important;
+  background-color: #c7c7c2 !important;
+}
+
+/* ── Base font: replace BlockNote's Inter with Public Sans ── */
+
+.bn-default-styles {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  color: var(--text-body, #1a1a1a);
+}
+
+.bn-block-outer {
+  line-height: 1.7;
+}
+
+/* ── Paragraph ── */
+
+[data-content-type="paragraph"] .bn-inline-content {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  color: var(--text-body, #1a1a1a);
+  line-height: 1.7;
+}
+
+/* ── Headings ──
+   BlockNote sizes headings via the --level CSS variable, which is then used
+   in font-size: var(--level) by a more specific selector in Block.css.
+   Overriding --level here (same specificity, later stylesheet) wins.
+   Font family / weight / color are applied directly on the block content. */
+
+[data-content-type="heading"]           { --level: 2.25em; } /* H1 */
+[data-content-type="heading"][data-level="2"] { --level: 1.875em; }
+[data-content-type="heading"][data-level="3"] { --level: 1.5em;   }
+[data-content-type="heading"][data-level="4"] { --level: 1.25em;  }
+[data-content-type="heading"][data-level="5"] { --level: 1.125em; }
+[data-content-type="heading"][data-level="6"] { --level: 1em;     }
+
+.bn-block-content[data-content-type="heading"],
+.bn-block-content[data-content-type="heading"] .bn-inline-content {
+  font-family: var(--font-display, 'Crimson Pro', serif);
+  color: var(--text-headings, #111111);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+/* 10px spacing above + 3px below every heading block (native and heading-line custom block) */
+.bn-block-outer:has(.bn-block-content[data-content-type="heading"]),
+.bn-block-outer:has(.heading-line-block) {
+  padding-top: 10px;
+  padding-bottom: 3px;
+}
+
+/* ── Lists ── */
+
+.bn-block-content[data-content-type="bulletListItem"] .bn-inline-content,
+.bn-block-content[data-content-type="numberedListItem"] .bn-inline-content,
+.bn-block-content[data-content-type="checkListItem"] .bn-inline-content {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  color: var(--text-body, #1a1a1a);
+  line-height: 1.7;
+}
+
+/* Bullet and number markers: burgundy */
+.bn-block-content[data-content-type="bulletListItem"]::before,
+.bn-block-content[data-content-type="numberedListItem"]::before {
+  color: var(--accent-light, #6B2A2A);
+  font-weight: 600;
+}
+
+/* 5px left indent for lists and quotes */
+.bn-block-content[data-content-type="bulletListItem"],
+.bn-block-content[data-content-type="numberedListItem"] {
+  padding-left: 5px;
+}
+
+/* ── Quote ── */
+
+.bn-block-content[data-content-type="quote"] {
+  padding-left: 5px;
+}
+
+[data-content-type="quote"] blockquote {
+  border-left: 3px solid var(--accent-light, #6B2A2A) !important;
+  color: var(--text-body, #1a1a1a) !important;
+  font-style: italic;
+  padding-left: 20px !important;
+  margin: 0;
+}
+
+[data-content-type="quote"] blockquote .bn-inline-content {
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 1.125rem;
+  color: var(--text-body, #1a1a1a);
+}
+
+/* ── Divider ── */
+
+[data-content-type="divider"] hr {
+  border: none !important;
+  border-top: 3px solid var(--accent-light, #6B2A2A) !important;
+  opacity: 1 !important;
+}
+
+/* ── Code block ── */
+
+.bn-block-content[data-content-type="codeBlock"] {
+  background-color: var(--bg-card, #E9E3E0) !important;
+  color: var(--text-body, #1a1a1a) !important;
+  border: 1px solid var(--border-card, #b8b0aa);
+  border-radius: 6px !important;
+}
+
+.bn-block-content[data-content-type="codeBlock"] > pre {
+  font-family: var(--font-mono, 'JetBrains Mono', 'Courier New', monospace) !important;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-body, #1a1a1a) !important;
+}
+
+/* Language selector chip */
+.bn-block-content[data-content-type="codeBlock"] > div > select {
+  color: var(--text-secondary, #4a4a4a) !important;
+}
+
+/* ── Inline code ── */
+
+.bn-inline-content code {
+  background: rgba(107, 42, 42, 0.08);
+  color: var(--accent-light, #6B2A2A);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono, 'JetBrains Mono', 'Courier New', monospace) !important;
+  font-size: 0.9em;
+}
+
+/* ── Inline links ── */
+
+.bn-inline-content a {
+  color: var(--accent-light, #6B2A2A);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-light, #6B2A2A);
+}
+
+.bn-inline-content a:hover {
+  color: var(--accent-emerald-300, #A85A5A);
+}
+
+/* ── Highlight / mark ── */
+
+.bn-inline-content mark {
+  background-color: rgba(107, 42, 42, 0.15);
+  color: inherit;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* ── Underline ── */
+
+.bn-inline-content u {
+  text-decoration-color: var(--accent-light, #6B2A2A);
+  text-decoration-thickness: 2px;
+}
+
+/* ── Table ── */
+
+[data-content-type="table"] table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+[data-content-type="table"] th,
+[data-content-type="table"] td {
+  border: 1px solid var(--border-card, #b8b0aa) !important;
+  padding: 8px 12px !important;
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  color: var(--text-body, #1a1a1a);
+}
+
+[data-content-type="table"] th {
+  background: var(--bg-card, #E9E3E0);
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-weight: 600 !important;
+  color: var(--text-headings, #111111) !important;
+}
+
+/* ── File / Image blocks ── */
+
+/* Upload button (editor: before file is set) */
+[data-file-block] .bn-add-file-button {
+  background-color: var(--bg-card, #E9E3E0) !important;
+  color: var(--text-secondary, #4a4a4a) !important;
+  border: 2px dashed var(--border-card, #b8b0aa) !important;
+  border-radius: 8px !important;
+}
+
+.bn-editor[contenteditable="true"] [data-file-block] .bn-add-file-button:hover,
+[data-file-block] .bn-file-name-with-icon:hover,
+.ProseMirror-selectednode .bn-file-name-with-icon {
+  background-color: #d4cdc9 !important;
+}
+
+/* Image itself */
+[data-file-block] .bn-visual-media {
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover lift on images in renderer */
+.editor-renderer [data-file-block] .bn-visual-media-wrapper:hover .bn-visual-media {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Image caption */
+[data-file-block] .bn-file-caption {
+  font-family: var(--font-display, 'Crimson Pro', serif) !important;
+  font-style: italic;
+  text-align: center !important;
+  color: var(--text-metadata, #5a5a5a) !important;
+  font-size: 0.875rem !important;
+  padding-block: 6px !important;
+}
+
+/* ── Toggle arrow — accent-light ── */
+
+.bn-toggle-button {
+  color: var(--accent-light, #6B2A2A) !important;
+}
+
+/* ── 10px block spacing for media / interactive blocks (native) ── */
+
+.bn-block-outer:has(.bn-block-content[data-content-type="image"]),
+.bn-block-outer:has(.bn-block-content[data-content-type="video"]),
+.bn-block-outer:has(.bn-block-content[data-content-type="quote"]),
+.bn-block-outer:has(.bn-block-content[data-content-type="toggle"]) {
+  padding-block: 10px;
+}
+
+/* ── Download file block ── */
+
+/* Left-align caption and reduce gap when in file-name (download) state */
+[data-file-block] .bn-file-block-content-wrapper:has(.bn-file-name-with-icon) .bn-file-caption {
+  text-align: left !important;
+  padding-block: 3px !important;
+}
+
+/* font-ui for the file name text */
+[data-file-block] .bn-file-name-with-icon {
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+}
+
+/* accent-light inside the file icon (SVG currentColor + fill fallback) */
+[data-file-block] .bn-file-icon {
+  color: var(--accent-light, #6B2A2A);
+}
+
+[data-file-block] .bn-file-name-with-icon .bn-file-icon svg,
+[data-file-block] .bn-file-name-with-icon .bn-file-icon svg * {
+  fill: var(--accent-light, #6B2A2A) !important;
+}
+
+/* ── Uniform captions across all block types ──
+   Matches the native image/file block caption style. */
+
+.bn-audio-caption,
+.bn-embed-caption {
+  font-family: var(--font-display, 'Crimson Pro', serif) !important;
+  font-style: italic !important;
+  text-align: center !important;
+  color: var(--text-metadata, #5a5a5a) !important;
+  font-size: 0.875rem !important;
+  padding-block: 6px !important;
+  margin: 0 !important;
+}
+
+/* ── Padding toggle for native image/video blocks ──
+   Uses backgroundColor="no-padding" as a persistence signal.
+   The prop renders as data-background-color on the block content element. */
+
+.bn-block-outer:has([data-background-color="no-padding"]) {
+  padding-block: 0 !important;
+}
+
+[data-background-color="no-padding"] {
+  background-color: transparent !important;
+}
+
+/* ── Selected block highlight (burgundy instead of blue) ── */
+
+.bn-block-content.ProseMirror-selectednode > *,
+.ProseMirror-selectednode > .bn-block-content > * {
+  outline-color: var(--accent-light, #6B2A2A) !important;
+}
+
+/* ── Profile bio renderer — remove BlockNote's default horizontal padding ── */
+
+.blocknote-profile-bio .bn-editor {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ── Profile bio renderer — 14px body font (overrides BlockNote's 16px default) ── */
+
+.blocknote-profile-bio .bn-block-outer,
+.blocknote-profile-bio [data-content-type="paragraph"] .bn-inline-content,
+.blocknote-profile-bio [data-content-type="bulletListItem"] .bn-inline-content,
+.blocknote-profile-bio [data-content-type="numberedListItem"] .bn-inline-content {
+  font-size: 14px !important;
+}
+
+/* ── Mobile: reduce BlockNote editor padding in content reader and resume cards ── */
+
+@media (max-width: 767px) {
+  .content-body .bn-editor,
+  .resume-entry-description-expanded .bn-editor {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+}

@@ -1,0 +1,315 @@
+/* ============================================================
+   Link Preview Block Styles — Design System Visuals
+   Colors: --accent-light #6B2A2A, --bg-card #E9E3E0, --border-card #b8b0aa
+   Fonts:  --font-display (Crimson Pro), --font-body (Public Sans)
+   ============================================================ */
+
+/* ── Outer wrapper ── */
+/* Full-width column flex; alignItems controls horizontal
+   positioning of the fixed-width banner inside */
+
+.bn-lp-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ── Banner card ── */
+
+.bn-lp-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  text-decoration: none;
+  width: 600px;
+  max-width: 100%;
+  min-height: 80px;
+  overflow: hidden;
+  background: var(--bg-card, #E9E3E0);
+  border: none;
+  border-left: 5px solid var(--accent-light, #6B2A2A);
+  border-radius: 0;
+  box-sizing: border-box;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Renderer mode — acts as a live link with hover lift */
+.bn-lp-banner:not(.bn-lp-banner--editor):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Editor mode — click-to-select, not a live link */
+.bn-lp-banner--editor {
+  cursor: pointer;
+}
+
+[data-color-scheme="dark"] .bn-lp-banner {
+  background: #272223;
+  border-left-color: var(--accent-light, #6B2A2A);
+}
+
+/* ── Favicon — left side ── */
+
+.bn-lp-favicon-wrap {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.bn-lp-favicon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.bn-lp-favicon-fallback {
+  color: var(--border-card, #b8b0aa);
+}
+
+/* ── Text column ── */
+
+.bn-lp-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0; /* required for text-overflow ellipsis */
+}
+
+/* ── Title row (title + domain on the right) ── */
+
+.bn-lp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bn-lp-title {
+  flex: 1;
+  font-family: var(--font-display, 'Crimson Pro', serif) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600;
+  color: var(--text-headings, #111111);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+[data-color-scheme="dark"] .bn-lp-title {
+  color: #E9E3E0;
+}
+
+.bn-lp-domain-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 0.75rem;
+  color: var(--accent-light, #6B2A2A);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.bn-lp-arrow {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* ── Description row ── */
+
+.bn-lp-description {
+  margin: 0;
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 0.875rem !important;
+  color: var(--text-metadata, #5a5a5a);
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+[data-color-scheme="dark"] .bn-lp-description {
+  color: #7a706b;
+}
+
+/* ============================================================
+   Input State (editor, URL not yet set)
+   ============================================================ */
+
+.bn-lp-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 600px;
+  max-width: 100%;
+  min-height: 80px;
+  padding: 0 16px;
+  border: 2px dashed var(--border-card, #b8b0aa);
+  border-radius: 8px;
+  background: var(--bg-card, #E9E3E0);
+  box-sizing: border-box;
+}
+
+[data-color-scheme="dark"] .bn-lp-input-container {
+  background: #272223;
+  border-color: #3e3739;
+}
+
+.bn-lp-input-icon {
+  flex-shrink: 0;
+  color: var(--border-card, #b8b0aa);
+}
+
+.bn-lp-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body, 'Public Sans', sans-serif);
+  font-size: 13px;
+  color: var(--text-body, #1a1a1a);
+  outline: none;
+  min-width: 0;
+}
+
+[data-color-scheme="dark"] .bn-lp-input {
+  color: #E9E3E0;
+}
+
+.bn-lp-input::placeholder {
+  color: var(--border-card, #b8b0aa);
+}
+
+.bn-lp-input-btn {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  background: var(--accent-light, #6B2A2A);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+}
+
+.bn-lp-input-btn:hover:not(:disabled) {
+  background: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-lp-input-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* ============================================================
+   Toolbar Popovers
+   ============================================================ */
+
+/* URL popover */
+.bn-lp-url-popover {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 8px 10px;
+  min-width: 300px;
+}
+
+.bn-lp-url-apply {
+  padding: 6px 14px;
+  background: var(--accent-light, #6B2A2A);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.bn-lp-url-apply:hover:not(:disabled) {
+  background: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-lp-url-apply:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Description popover */
+.bn-lp-desc-popover {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 8px 10px;
+  min-width: 300px;
+}
+
+.bn-lp-desc-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bn-lp-desc-apply {
+  padding: 6px 14px;
+  background: var(--accent-light, #6B2A2A);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.bn-lp-desc-apply:hover {
+  background: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-lp-desc-reset {
+  font-size: 11px;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.bn-lp-desc-reset:hover {
+  color: var(--text-body, #1a1a1a);
+}
+
+[data-color-scheme="dark"] .bn-lp-desc-reset:hover {
+  color: #ddd;
+}
+
+.bn-lp-desc-hint {
+  font-size: 11px;
+  color: #888;
+  padding: 0 2px;
+}

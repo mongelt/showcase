@@ -1,0 +1,222 @@
+/**
+ * Column & ColumnList Block Styles
+ *
+ * Layout strategy:
+ *   BlockNote puts column children in a .bn-block-group that is either:
+ *     (A) a direct child of .bn-block-outer  (sibling of .bn-block)
+ *     (B) a direct child of .bn-block        (inside it)
+ *   We target that group with CSS :has() to make a flex row — no DOM manipulation.
+ *
+ * Hover / drag-handle access:
+ *   The columnList block renders a thin .column-list-handle bar in editor mode.
+ *   Hovering this bar makes BlockNote's ⠿ and + side-menu buttons appear for the
+ *   columnList block itself. Clicking ⠿ opens the drag-handle dropdown which
+ *   contains the Column Settings section (add / remove / resize columns).
+ *
+ * Width model:
+ *   Each column stores its width as a real percentage (10–100).
+ *   The total across all columns must not exceed 100.
+ *   CSS :has([data-column-width="N"]) rules apply flex basis synchronously.
+ *   flex-shrink:1 allows tiny give when gap pushes total slightly over 100%.
+ *   justify-content:center means a layout whose total < 100% is centered.
+ */
+
+/* ── .column div: invisible placeholder rendered by the column block ── */
+.column {
+  display: contents;
+}
+
+/* ── .column-list: wrapper for the handle bar (visible in editor, hidden in renderer) ── */
+.column-list {
+  /* block-level; height comes from .column-list-handle inside */
+}
+
+/* Thin handle bar at the top of the columnList block.
+   Invisible by default; gets a subtle tint when the user hovers the block. */
+.column-list-handle {
+  height: 10px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 0.15s, opacity 0.15s;
+  cursor: default;
+}
+
+/* Show a faint tint on hover so users know this area is interactive */
+.bn-block-outer:has(.column-list-handle):hover .column-list-handle {
+  background: var(--mantine-color-gray-2, #e9ecef);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   POINTER-EVENTS FIX
+   The columnList's .bn-block-outer is a wide invisible wrapper that spans the
+   full width above the columns. Without this fix, moving the mouse from the
+   leftmost column toward the + button enters the columnList's outer shell,
+   which steals hover state and hides the column's side menu (and its + button).
+   Solution: disable pointer events on the outer shell; re-enable on children
+   so the .column-list-handle and the columns themselves still work.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.bn-block-outer:has(.column-list) {
+  pointer-events: none;
+}
+
+.bn-block-outer:has(.column-list) > .bn-block,
+.bn-block-outer:has(.column-list) > .bn-block-group,
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group {
+  pointer-events: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORE LAYOUT — flex row on the .bn-block-group that holds the columns
+   Two selectors cover both DOM structures (A and B above).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Structure A */
+.bn-block-outer:has(.column-list) > .bn-block-group,
+/* Structure B */
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: center;
+  /* Remove BlockNote's nesting indentation so column 1 starts at editor_content.left.
+     BlockNote's SideMenu clamps mouse X to editor_content.left + 10. If this flex
+     container has left indent, that clamped X lands in the indentation gap, where
+     elementsFromPoint returns the flex container itself — getDraggableBlockFromElement
+     then traverses UP to the columnList, and step 2 checks columnList.right which
+     lands in column 2. Zeroing the indent means clamped X is inside column 1, which
+     correctly traverses to column 1's blockContainer. */
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Each column's .bn-block-outer: default 50% flex basis. */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer,
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer {
+  flex: 0 1 50%;
+  min-width: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COLUMN WIDTH VARIATIONS — CSS :has() rules for step-5 values (10–100)
+   These override the default 50% above based on data-column-width attribute.
+   CSS reads data-* attributes synchronously (unlike useEffect which is async),
+   so width changes appear instantly in the editor without ProseMirror timing issues.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 10% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="10"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="10"]) { flex: 0 1 10%; }
+
+/* 15% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="15"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="15"]) { flex: 0 1 15%; }
+
+/* 20% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="20"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="20"]) { flex: 0 1 20%; }
+
+/* 25% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="25"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="25"]) { flex: 0 1 25%; }
+
+/* 30% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="30"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="30"]) { flex: 0 1 30%; }
+
+/* 35% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="35"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="35"]) { flex: 0 1 35%; }
+
+/* 40% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="40"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="40"]) { flex: 0 1 40%; }
+
+/* 45% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="45"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="45"]) { flex: 0 1 45%; }
+
+/* 50% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="50"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="50"]) { flex: 0 1 50%; }
+
+/* 55% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="55"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="55"]) { flex: 0 1 55%; }
+
+/* 60% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="60"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="60"]) { flex: 0 1 60%; }
+
+/* 65% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="65"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="65"]) { flex: 0 1 65%; }
+
+/* 70% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="70"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="70"]) { flex: 0 1 70%; }
+
+/* 75% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="75"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="75"]) { flex: 0 1 75%; }
+
+/* 80% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="80"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="80"]) { flex: 0 1 80%; }
+
+/* 85% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="85"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="85"]) { flex: 0 1 85%; }
+
+/* 90% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="90"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="90"]) { flex: 0 1 90%; }
+
+/* 95% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="95"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="95"]) { flex: 0 1 95%; }
+
+/* 100% */
+.bn-block-outer:has(.column-list) > .bn-block-group > .bn-block-outer:has(.column[data-column-width="100"]),
+.bn-block-outer:has(.column-list) > .bn-block > .bn-block-group > .bn-block-outer:has(.column[data-column-width="100"]) { flex: 0 1 100%; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   READ-ONLY RENDERER
+   The BlockNoteRenderer wraps BlockNoteView in div.editor-renderer.
+   ─ Hide the handle bar (not needed in read-only view).
+   ─ Remove nesting indicator lines inside columns.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Hide the handle bar in read-only contexts */
+.editor-renderer .column-list {
+  display: none;
+}
+
+/* Remove nesting lines inside column blocks in the renderer */
+.editor-renderer .bn-block-outer:has(.column) .bn-block-outer::before,
+.editor-renderer .bn-block-outer:has(.column) .bn-block-outer > .bn-block::before {
+  display: none !important;
+}
+
+.editor-renderer .bn-block-outer:has(.column) .bn-block-group {
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+
+.editor-renderer .bn-block-outer:has(.column) .bn-block-outer {
+  border-left: none !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — stack vertically on narrow screens
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .bn-block-outer:has(.column-list) > .bn-block-group,
+  .bn-block-outer:has(.column-list) > .bn-block > .bn-block-group {
+    flex-direction: column;
+  }
+}

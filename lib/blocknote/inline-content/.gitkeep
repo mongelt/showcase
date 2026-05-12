@@ -1,0 +1,3 @@
+# Custom Inline Content implementations
+# Each custom inline content will be in its own file (e.g., TextTag.tsx)
+# Follow pattern from docs/blocknote-documentation/examples/06-custom-schema/02-suggestion-menus-mentions/src/Mention.tsx

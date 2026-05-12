@@ -1,0 +1,3 @@
+# Custom Block implementations
+# Each custom block will be in its own file (e.g., Alert.tsx, Embed.tsx)
+# Follow pattern from docs/blocknote-documentation/examples/06-custom-schema/01-alert-block/src/Alert.tsx

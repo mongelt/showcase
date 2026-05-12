@@ -1,0 +1,1112 @@
+@import "tailwindcss";
+@import "video.js/dist/video-js.css";
+
+/* Tailwind v4 Theme Configuration - Custom Colors */
+/* In Tailwind v4, @theme defines colors that Tailwind will generate utilities for */
+/* NOTE: @theme must come BEFORE :root so CSS variables are available */
+/* We use direct color values here (matching :root values) so Tailwind can generate utilities */
+@theme {
+  /* Accent Colors - Burgundy Family */
+  --color-accent-light: #6B2A2A;
+  --color-accent-dark: #fc5454;
+  --color-accent-emerald-300: #A85A5A;
+  --color-accent-emerald-400: #6B2A2A;
+  --color-accent-emerald-700: #6B2A2A;
+  --color-accent-purple-600: #6B2A2A;
+  --color-accent-blue: #6B2A2A;
+  
+  /* Background Colors */
+  --color-bg-main: #c7c7c2;
+  --color-bg-menu-bar: #0B0A0A;
+  --color-bg-card: #E9E3E0;
+  --color-bg-card-alt: #E9E3E0;
+  --color-bg-profile: #121212;
+  --color-bg-info-menu: #1a1618;
+  --color-bg-gray-800: #181416;
+  --color-bg-gray-700: #272223;
+  --color-bg-unlinked-skills-pill: #2a2527;
+  
+  /* Text Colors */
+  --color-text-headings: #111111;
+  --color-text-body: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-text-metadata: #5a5a5a;
+  --color-text-on-dark: #e0e0e0;
+  --color-text-on-dark-secondary: #b0b0b0;
+  --color-text-on-dark-inactive: #808080;
+  --color-text-on-dark-hover: #e8e2dd;
+  --color-text-white: #ffffff;
+  --color-text-primary: #1a1a1a;
+  --color-text-gray-400: #4d4844;
+  --color-text-gray-500: #5c5652;
+  
+  /* Border Colors */
+  --color-border-gray-800: #2e2a28;
+  --color-border-gray-700: #3d3835;
+  --color-border-card: #b8b0aa;
+}
+
+:root {
+  /* ============================================
+     REDESIGN DESIGN TOKENS - Single Source of Truth
+     Source: docs/design-mockup/redesign-mockup.html lines 37-112
+     ============================================ */
+  
+  /* Background Colors */
+  --bg-main: #c7c7c2; /* Middle zone (content reader, resume background) - colder weathered stone gray */
+  --bg-menu-bar: #0B0A0A; /* Main menu and bottom nav - warm black */
+  --bg-card: #E9E3E0; /* Resume cards background */
+  --bg-card-alt: #E9E3E0;
+  --bg-profile: #121212; /* Profile tab background - cold granite */
+  --bg-info-menu: #1a1618; /* Info menu - warm black */
+  --bg-gray-800: #181416;
+  --bg-gray-700: #272223;
+  --bg-unlinked-skills-pill: #2a2527;
+  
+  /* Text Colors */
+  --text-headings: #111111; /* Headings */
+  --text-body: #1a1a1a; /* Body text */
+  --text-secondary: #4a4a4a; /* Secondary text - cooler neutral gray */
+  --text-metadata: #5a5a5a; /* Metadata text - cooler neutral gray */
+  --text-on-dark: #e0e0e0; /* Cooler neutral gray */
+  --text-on-dark-secondary: #b0b0b0; /* Cooler neutral gray */
+  --text-on-dark-inactive: #808080; /* Cooler neutral gray */
+  --text-on-dark-hover: #e8e2dd; /* Hover state for text on dark backgrounds */
+  /* FIX: text-white should be pure white for pills and other white-on-burgundy elements */
+  --text-white: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-gray-400: #4d4844;
+  --text-gray-500: #5c5652;
+  
+  /* Accent Colors - Burgundy Family (Desaturated) */
+  --accent-light: #6B2A2A; /* Primary burgundy accent - used for selected items, links, underlines, corner marks, skill pills, content tabs, collection tabs, center entry markers */
+  --accent-dark: #fc5454; /* Main menu selected, info menu labels - desaturated burgundy */
+  --accent-emerald-300: #A85A5A; /* Hover states - desaturated burgundy */
+  
+  /* Consolidated aliases (all point to --accent-light for consistency) */
+  --accent-emerald-400: var(--accent-light); /* Alias: Used for selected items, links */
+  --accent-emerald-700: var(--accent-light); /* Alias: Skill pills, content tabs */
+  --accent-purple-600: var(--accent-light); /* Alias: Collection tabs */
+  --accent-blue: var(--accent-light); /* Alias: Center entry markers */
+  
+  /* Border Colors */
+  --border-gray-800: #2e2a28;
+  --border-gray-700: #3d3835;
+  --border-card: #b8b0aa;
+  
+  /* Spacing */
+  --spacing-profile-collapsed: 200px;
+  --spacing-menu-bar-top: 15px;
+  --spacing-menu-bar-horizontal: 60px;
+  --spacing-content-top: 105px;
+  --spacing-content-left: 295px; /* Info menu width (280px) + 30px gap (will be updated in Step 8) */
+  --spacing-content-right: 50px;
+  --spacing-bottom-nav-height: 64px;
+  --spacing-info-menu-left: 25px;
+  --spacing-menu-bar-height: 64px;
+  
+  /* Typography */
+  /* Note: --font-display, --font-body, --font-ui are set by Next.js font loaders in app/layout.tsx */
+  /* These are fallbacks only - Next.js will override them */
+  --font-display: 'Crimson Pro', serif;
+  --font-body: 'Public Sans', sans-serif;
+  --font-ui: 'Space Grotesk', sans-serif;
+  --font-primary: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  
+  /* Layout */
+  --info-menu-width: 280px; /* Redesign change: Changed from centered to sidebar */
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  
+  /* Resume Tab Fixed Layout Constraints (CRITICAL - Cannot Change) */
+  --width-side-card: 560px; /* ⚠️ CRITICAL: Cannot change without breaking timeline calculations */
+  --width-center-card: 384px; /* ⚠️ CRITICAL: Cannot change without breaking timeline calculations */
+  --timeline-offset: 35px; /* ⚠️ CRITICAL: Cannot change without breaking timeline math */
+  
+  /* Layout Constants */
+  --business-card-height: 200px;
+  --tab-bar-height: 64px; /* ⚠️ CRITICAL: Must match BOTTOM_NAV_HEIGHT_PX in lib/constants.ts */
+  --sidebar-width: 320px;
+}
+
+html {
+  background: var(--bg-main) !important;
+  /* height: 100% removed — was making body a bounded scroll container, breaking position:fixed on iOS Safari */
+}
+
+/* Override Tailwind dark mode default background */
+html.dark {
+  background: var(--bg-main) !important;
+}
+
+body {
+  min-height: 100vh;
+  /* height: 100% removed — window scrolls naturally so position:fixed bottom nav stays anchored */
+  color: var(--text-body);
+  background: var(--bg-main) !important;
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: 1.65;
+  overflow-x: hidden; /* Per redesign spec: prevents horizontal scrolling */
+  transition: background 0.3s ease;
+}
+
+/* Override Tailwind dark mode default background on body */
+body.dark {
+  background: var(--bg-main) !important;
+}
+
+/* Ensure font-display class uses Crimson Pro correctly */
+/* Note: This is a functional override to ensure Next.js font variable is applied correctly */
+.font-display {
+  font-family: var(--font-display) !important;
+}
+
+/* Menu expanded state: Same uniform background */
+body.menu-expanded {
+  background: var(--bg-main);
+}
+
+.fixed-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+.dm-content-wrapper::-webkit-scrollbar { display: none; }
+
+.fixed-sidebar {
+  position: fixed;
+  left: 0;
+  top: var(--business-card-height);
+  bottom: var(--tab-bar-height);
+  width: var(--sidebar-width);
+  z-index: 30;
+  overflow-y: auto;
+}
+
+.fixed-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--tab-bar-height);
+  z-index: 50;
+}
+
+.content-area {
+  margin-top: var(--business-card-height);
+  margin-bottom: var(--tab-bar-height);
+  min-height: calc(100vh - var(--business-card-height) - var(--tab-bar-height));
+  transition: margin-left 0.3s ease;
+}
+
+.content-area.with-sidebar {
+  margin-left: var(--sidebar-width);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* ============================================
+   MAIN MENU + COLLECTIONS MENU PSEUDO-ELEMENTS
+   Step 4: Redesign implementation
+   ============================================ */
+
+/* Main Menu - Active border (expanded state) */
+.main-menu::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 9px; /* Expanded state - will be 2px in collapsed via CSS */
+  background: var(--accent-light);
+  transition: height 0.3s ease;
+}
+
+/* Main Menu - Active border (collapsed state) */
+.portfolio-menu-bar.collapsed .main-menu::before {
+  height: 2px;
+}
+
+/* Collections Menu - Active border (expanded state) */
+.collections-menu::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 9px; /* Expanded state - will be 2px in collapsed via CSS */
+  background: var(--accent-light);
+  transition: height 0.3s ease;
+}
+
+/* Collections Menu - Active border (collapsed state) */
+.portfolio-menu-bar.collapsed .collections-menu::before {
+  height: 2px;
+}
+
+/* Content Items - Dash prefix */
+.main-menu-item[data-content-item="true"] > div:first-child::before {
+  content: '—';
+  color: var(--accent-dark);
+  margin-right: 8px;
+}
+
+/* Content Items - Selected state with dash */
+.main-menu-item.selected[data-content-item="true"] > div:first-child::before {
+  color: #A85A5A; /* accent-emerald-300 */
+}
+
+/* Portfolio Menu Bar - Collapsed state */
+.portfolio-menu-bar.collapsed {
+  padding-bottom: 4px; /* Reduced from 10px by 6px to fix breadcrumb vertical centering */
+  align-items: center; /* Center breadcrumb vertically in collapsed state */
+}
+
+/* ============================================
+   CONTENT READER
+   Step 5: Redesign implementation - Fonts, Colors, and Background (NO positioning changes)
+   ============================================ */
+
+/* Content Reader - Main container (background only, no positioning) */
+.content-reader {
+  background: linear-gradient(to bottom, var(--bg-main) 0%, var(--bg-main) 100%);
+}
+
+/* Content Reader - Title (fonts and colors only) */
+.content-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-headings);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+/* Content Reader - Subtitle (fonts and colors only) */
+.content-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--accent-light);
+}
+
+/* Content Reader - Body (fonts and colors only) */
+.content-body {
+  font-family: var(--font-body);
+  color: var(--text-body);
+  line-height: 1.7;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.content-body p {
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   INFO MENU
+   Step 5: Redesign implementation
+   ============================================ */
+
+/* Info Menu - Main container */
+.info-menu {
+  position: fixed;
+  left: 0;
+  top: calc(var(--spacing-profile-collapsed) + var(--spacing-menu-bar-height));
+  bottom: var(--spacing-bottom-nav-height);
+  width: var(--info-menu-width);
+  background: var(--bg-info-menu);
+  padding: 32px 28px;
+  border-right: 1px solid var(--border-gray-800);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.15), 2px 0 8px rgba(0,0,0,0.08);
+  z-index: 20;
+  overflow-y: auto;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Info Menu - Sticky title container */
+.info-menu-sticky-title {
+  margin-bottom: 16px;
+  padding-top: 16px;
+  padding-bottom: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Info Menu - Sticky title text */
+.info-menu-sticky-title-text {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  line-height: 1.3;
+}
+
+/* Info Menu - Sticky subtitle */
+.info-menu-sticky-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-on-dark-inactive);
+  line-height: 1.25;
+  margin-top: 4px;
+}
+
+/* Info Menu - Label (field labels) */
+.info-menu-label {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+/* Info Menu - Value (field values) */
+.info-menu-value {
+  font-family: var(--font-body);
+  color: var(--text-on-dark-inactive);
+}
+
+/* Info Menu - Line (metadata line container) */
+.info-menu-line {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  margin-bottom: 8px;
+}
+
+/* Info Menu - Link */
+.info-menu-link {
+  font-family: var(--font-body);
+  color: var(--text-on-dark-inactive);
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Info Menu - Link hover */
+.info-menu-link:hover {
+  color: var(--text-on-dark);
+}
+
+/* Info Menu - Favicon */
+.info-menu-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   RESUME TAB
+   Step 6: Redesign implementation - HIGH RISK
+   ============================================ */
+
+/* Resume Container - Background only (NO positioning/layout changes) */
+.resume-container {
+  background: var(--bg-main);
+}
+
+/* Timeline Now Marker - Visuals only (NO positioning changes) */
+.timeline-now-marker {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-light);
+}
+
+/* Timeline Line - Visuals only (NO positioning changes) */
+.timeline-line {
+  background: linear-gradient(to bottom, rgba(122, 48, 32, 0.75) 0%, rgba(122, 48, 32, 0.75) 90%, transparent 100%);
+  filter: blur(0.5px);
+  z-index: 1; /* Above body background, below month marker pills */
+}
+
+/* Timeline Month Marker Background Pill - Visuals only (NO positioning changes) */
+.timeline-month-marker-pill {
+  background: var(--bg-main); /* Fully opaque center */
+  padding: 4px 12px;
+  padding-top: 9px; /* Extended by 5px to accommodate fade above */
+  padding-bottom: 9px; /* Extended by 5px to accommodate fade below */
+  border-radius: 4px;
+  border: none;
+  z-index: 2 !important; /* Above timeline line (z-index 1), below ALL text (z-index 3) */
+  position: absolute;
+  left: 0;
+  top: -5px; /* Extend 5px above to accommodate fade */
+  right: 0;
+  bottom: -10px; /* Extend 10px below (5px + 5px more) to accommodate fade */
+  pointer-events: none;
+  /* Fade-out gradient at edges - extended 5px above and 10px below */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 75%,
+    transparent 100%
+  );
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 75%,
+    transparent 100%
+  );
+  -webkit-mask-composite: source-in;
+}
+
+/* Timeline Month Marker Text - Visuals only (NO positioning changes) */
+.timeline-month-marker-text {
+  color: var(--accent-light);
+  font-size: 0.9rem;
+  font-weight: 300;
+  white-space: nowrap;
+  z-index: 3 !important; /* Above ALL background pills (z-index 2) - ensures text from any marker appears above pills from any marker */
+  position: relative;
+  display: inline-block;
+  padding: 4px 12px; /* Match pill padding */
+  text-shadow: none !important; /* Remove text shadow per redesign */
+}
+
+/* Timeline Birth Marker - Visuals only (NO positioning changes) */
+.timeline-birth-marker {
+  color: var(--text-metadata);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-body);
+}
+
+/* ============================================
+   RESUME TAB - CENTER ENTRY
+   Visuals only (NO positioning/layout changes)
+   ============================================ */
+
+/* Center Entry Card - Visuals only (NO positioning changes) */
+.resume-entry-card-center {
+  background: transparent !important;
+  border: none !important;
+  z-index: 10;
+}
+
+/* Center Entry Title - Visuals only (NO positioning changes) */
+.resume-entry-card-center .resume-entry-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--accent-light);
+}
+
+/* Center Entry Date - Visuals only (NO positioning changes) */
+.resume-entry-card-center .resume-entry-date {
+  background: none;
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--text-metadata);
+}
+
+/* Center Entry Description - Visuals only (NO positioning changes) */
+.center-entry-description {
+  color: var(--text-body);
+  font-size: var(--font-size-base);
+  text-align: center !important;
+}
+
+/* Center Entry Background Pill - Visuals only (NO positioning changes) */
+.center-entry-pill {
+  background: var(--bg-main); /* Fully opaque - completely blocks timeline */
+  border-radius: 4px;
+  z-index: 6; /* Between month markers (7) and side lines (5) */
+  pointer-events: none; /* Allow clicks to pass through */
+  position: absolute; /* Positioned via inline styles in component */
+  /* 10px fade-out gradient at edges (384px width ≈ 2.6% per 10px, using ~3% for safety) */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  ),
+  linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  -webkit-mask-composite: source-in;
+}
+
+/* Center Entry Actions - Remove filters/shadows (NO positioning changes) */
+.resume-entry-card-center .resume-entry-action,
+.center-entry-expand-btn {
+  filter: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  -webkit-filter: none !important;
+}
+
+/* Center Entry Expand/Collapse Button - Visuals only (NO positioning changes) */
+.center-entry-expand-btn {
+  color: var(--accent-light) !important;
+  opacity: 1 !important;
+}
+
+/* Remove all shadows from center entry and its children */
+.resume-entry-card-center,
+.resume-entry-card-center * {
+  filter: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   RESUME TAB - SIDE ENTRIES (LEFT & RIGHT)
+   Visuals only (NO positioning/layout changes)
+   ============================================ */
+
+/* Side Entry Cards - Visuals only (NO positioning changes) */
+.resume-entry-card-left,
+.resume-entry-card-right {
+  background: linear-gradient(to bottom, rgba(220, 210, 200, 0.85) 0%, rgba(210, 200, 190, 0.75) 100%) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-left: 0px solid var(--accent-light) !important;
+  border-right: 0px solid var(--accent-light) !important;
+  border-bottom: 3px solid var(--accent-light) !important;
+  border-top: 6px solid var(--accent-light) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+  transition: box-shadow 0.3s ease !important;
+}
+
+.resume-entry-card-left:hover,
+.resume-entry-card-right:hover,
+.resume-entry-card-left.is-expanded,
+.resume-entry-card-right.is-expanded {
+  box-shadow: 4px 6px 16px rgba(0,0,0,0.27) !important;
+}
+
+/* Paper texture overlay - Visuals only (NO positioning changes) */
+.resume-entry-card-left::after,
+.resume-entry-card-right::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, transparent 0.5px, transparent 1.5px, rgba(0,0,0,0.08) 2px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.08) 0px, transparent 0.5px, transparent 1.5px, rgba(0,0,0,0.08) 2px);
+  background-size: 3px 3px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0; /* Behind content */
+}
+
+/* Ensure card content appears above texture overlay */
+.resume-entry-card-left > *,
+.resume-entry-card-right > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Corner accent mark - left cards: top-right corner */
+.resume-entry-card-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 0;
+  border-color: transparent var(--accent-light) transparent transparent;
+  z-index: 2; /* Above content */
+}
+
+/* Corner accent mark - right cards: top-left corner */
+.resume-entry-card-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 10px 10px;
+  border-color: transparent transparent transparent var(--accent-light);
+  z-index: 2; /* Above content */
+}
+
+/* Side Entry Title - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-title,
+.resume-entry-card-right .resume-entry-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--text-headings);
+  line-height: 1.3;
+}
+
+/* Side Entry Subtitle - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-subtitle,
+.resume-entry-card-right .resume-entry-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  font-family: var(--font-body);
+}
+
+/* Side Entry Date - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-date,
+.resume-entry-card-right .resume-entry-date {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-metadata);
+}
+
+/* Present date indicator dot */
+.resume-entry-card-left .resume-entry-date.has-present::after,
+.resume-entry-card-right .resume-entry-date.has-present::after {
+  content: '';
+  display: inline-block;
+  width: 4.5px;
+  height: 4.5px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  margin-left: 6px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+/* Side Entry Description - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-description,
+.resume-entry-card-right .resume-entry-description {
+  color: var(--text-body);
+  font-size: var(--font-size-base);
+}
+
+/* Side Entry Description Expanded - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-description-expanded,
+.resume-entry-card-right .resume-entry-description-expanded {
+  margin-top: 16px;
+  padding: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(122, 48, 32, 0.15);
+  background: rgba(192, 184, 180, 0.15);
+  color: var(--text-body);
+  font-size: var(--font-size-base);
+  line-height: 1.7;
+  text-align: left !important;
+}
+
+.resume-entry-card-left .resume-entry-description-expanded p,
+.resume-entry-card-right .resume-entry-description-expanded p {
+  margin-bottom: 16px;
+}
+
+.resume-entry-card-left .resume-entry-description-expanded p:last-child,
+.resume-entry-card-right .resume-entry-description-expanded p:last-child {
+  margin-bottom: 0;
+}
+
+/* Side Entry Asset Box - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-asset,
+.resume-entry-card-right .resume-entry-asset {
+  border: 1px solid var(--border-card);
+  background: var(--accent-light);
+  border-radius: 6px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  transition: all 0.2s;
+  box-shadow: inset 0 1px 2px rgba(122, 48, 32, 0.06), inset 0 0 0 1px rgba(122, 48, 32, 0.08);
+}
+
+.resume-entry-card-left .resume-entry-asset:hover,
+.resume-entry-card-right .resume-entry-asset:hover {
+  border-color: var(--accent-light);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 2px rgba(122, 48, 32, 0.08), inset 0 0 0 1px rgba(122, 48, 32, 0.12), 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--accent-dark);
+}
+
+/* Side Entry Asset Icon - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-asset-icon,
+.resume-entry-card-right .resume-entry-asset-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  top: 8px;
+  left: 8px;
+  margin: 0;
+}
+
+/* Side Entry Asset Caption - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-asset-caption,
+.resume-entry-card-right .resume-entry-asset-caption {
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  font-family: var(--font-body);
+}
+
+/* Side Entry Actions - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-actions,
+.resume-entry-card-right .resume-entry-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Side Entry Action Button - Visuals only (NO positioning changes) */
+.resume-entry-card-left .resume-entry-action,
+.resume-entry-card-right .resume-entry-action {
+  color: var(--accent-light);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resume-entry-card-left .resume-entry-action:hover,
+.resume-entry-card-right .resume-entry-action:hover {
+  color: var(--accent-dark);
+}
+
+/* ============================================
+   MOBILE OVERRIDES
+   ============================================ */
+
+@media (max-width: 767px) {
+  .resume-entry-card-left .resume-entry-description-expanded,
+  .resume-entry-card-right .resume-entry-description-expanded {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+}
+
+/* ============================================
+   BOTTOM NAV — BUTTON ICON ANIMATIONS (Stage 2)
+   ============================================ */
+
+/* Download folder */
+.dl-btn .dl-file-back  { z-index: 1; width: 80%; height: auto; }
+.dl-btn .dl-file-page  { width: 50%; height: auto; position: absolute; z-index: 2; transition: all 0.3s ease-out; }
+.dl-btn .dl-file-front { width: 85%; height: auto; position: absolute; z-index: 3; opacity: 0.95; transform-origin: bottom; transition: all 0.3s ease-out; }
+.dl-btn:hover .dl-file-page  { transform: translateY(-5px); }
+.dl-btn:hover .dl-file-front { transform: rotateX(30deg); }
+.dl-btn:active { transform: scale(0.95); }
+
+/* Copy link clipboard */
+.cl-btn .cl-back  { z-index: 1; width: 72%; height: auto; }
+.cl-btn .cl-sheet { width: 52%; height: auto; position: absolute; z-index: 2; top: 7px; transform-origin: top center; transition: all 0.3s ease-out; }
+.cl-btn .cl-clamp { width: 44%; height: auto; position: absolute; z-index: 3; top: 0; opacity: 0.95; transition: all 0.3s ease-out; }
+.cl-btn:hover .cl-sheet { transform: rotate(22deg) translateX(4px); }
+.cl-btn:active { transform: scale(0.95); }
+
+/* ============================================
+   BOTTOM NAV — TAB HOVER UNDERLINE (Stage 3)
+   Expands from center outward on hover.
+   Suppressed on the active tab (motion.div handles that underline).
+   ============================================ */
+.tab-hover-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #6B2A2A;
+  transition: width 400ms cubic-bezier(0.25, 0.8, 0.25, 1),
+              left   400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+.tab-hover-btn:hover::after {
+  left: 0;
+  width: 100%;
+}
+.tab-hover-btn-active::after {
+  display: none;
+}
+
+/* ── Typewriter Loader ─────────────────────────────────────────
+   Custom tokens applied to match the site colour scheme.
+   No background — wrapper is always transparent.
+   ─────────────────────────────────────────────────────────── */
+.typewriter-loader {
+  --blue: #fc5454;
+  --blue-dark: #6b2a2a;
+  --key: #e9e3e0;
+  --paper: #e9e3e0;
+  --text: #1a1a1a;
+  --tool: #6b2a2a;
+  --duration: 3s;
+  position: relative;
+  animation: twBounce var(--duration) linear infinite;
+}
+
+.typewriter-loader .slide {
+  width: 92px;
+  height: 20px;
+  border-radius: 3px;
+  margin-left: 14px;
+  transform: translateX(14px);
+  background: linear-gradient(var(--blue), var(--blue-dark));
+  animation: twSlide var(--duration) ease infinite;
+}
+
+.typewriter-loader .slide:before,
+.typewriter-loader .slide:after,
+.typewriter-loader .slide i:before {
+  content: "";
+  position: absolute;
+  background: var(--tool);
+}
+
+.typewriter-loader .slide:before {
+  width: 2px;
+  height: 8px;
+  top: 6px;
+  left: 100%;
+}
+
+.typewriter-loader .slide:after {
+  left: 94px;
+  top: 3px;
+  height: 14px;
+  width: 6px;
+  border-radius: 3px;
+}
+
+.typewriter-loader .slide i {
+  display: block;
+  position: absolute;
+  right: 100%;
+  width: 6px;
+  height: 4px;
+  top: 4px;
+  background: var(--tool);
+}
+
+.typewriter-loader .slide i:before {
+  right: 100%;
+  top: -2px;
+  width: 4px;
+  border-radius: 2px;
+  height: 14px;
+}
+
+.typewriter-loader .paper {
+  position: absolute;
+  left: 24px;
+  top: -26px;
+  width: 40px;
+  height: 46px;
+  border-radius: 5px;
+  background: var(--paper);
+  transform: translateY(46px);
+  animation: twPaper var(--duration) linear infinite;
+}
+
+.typewriter-loader .paper:before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 7px;
+  border-radius: 2px;
+  height: 4px;
+  transform: scaleY(0.8);
+  background: var(--text);
+  box-shadow: 0 12px 0 var(--text), 0 24px 0 var(--text), 0 36px 0 var(--text);
+}
+
+.typewriter-loader .keyboard {
+  width: 120px;
+  height: 56px;
+  margin-top: -10px;
+  z-index: 1;
+  position: relative;
+}
+
+.typewriter-loader .keyboard:before,
+.typewriter-loader .keyboard:after {
+  content: "";
+  position: absolute;
+}
+
+.typewriter-loader .keyboard:before {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  transform: perspective(10px) rotateX(2deg);
+  transform-origin: 50% 100%;
+}
+
+.typewriter-loader .keyboard:after {
+  left: 2px;
+  top: 25px;
+  width: 11px;
+  height: 4px;
+  border-radius: 2px;
+  box-shadow:
+    15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+    60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+    22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+    60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  animation: twKeyboard var(--duration) linear infinite;
+}
+
+@keyframes twBounce {
+  85%, 92%, 100% { transform: translateY(0); }
+  89%            { transform: translateY(-4px); }
+  95%            { transform: translateY(2px); }
+}
+
+@keyframes twSlide {
+  5%            { transform: translateX(14px); }
+  15%, 30%      { transform: translateX(6px); }
+  40%, 55%      { transform: translateX(0); }
+  65%, 70%      { transform: translateX(-4px); }
+  80%, 89%      { transform: translateX(-12px); }
+  100%          { transform: translateX(14px); }
+}
+
+@keyframes twPaper {
+  5%            { transform: translateY(46px); }
+  20%, 30%      { transform: translateY(34px); }
+  40%, 55%      { transform: translateY(22px); }
+  65%, 70%      { transform: translateY(10px); }
+  80%, 85%      { transform: translateY(0); }
+  92%, 100%     { transform: translateY(46px); }
+}
+
+@keyframes twKeyboard {
+  5%, 12%, 21%, 30%, 39%, 48%, 57%, 66%, 75%, 84% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  9% {
+    box-shadow:
+      15px 2px 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  18% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 2px 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  27% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 12px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  36% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 12px 0 var(--key),
+      60px 12px 0 var(--key), 68px 12px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  45% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 2px 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  54% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 2px 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  63% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 12px 0 var(--key);
+  }
+  72% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 2px 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 10px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+  81% {
+    box-shadow:
+      15px 0 0 var(--key), 30px 0 0 var(--key), 45px 0 0 var(--key),
+      60px 0 0 var(--key), 75px 0 0 var(--key), 90px 0 0 var(--key),
+      22px 10px 0 var(--key), 37px 12px 0 var(--key), 52px 10px 0 var(--key),
+      60px 10px 0 var(--key), 68px 10px 0 var(--key), 83px 10px 0 var(--key);
+  }
+}

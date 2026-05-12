@@ -1,0 +1,247 @@
+/* ============================================================
+   Text Tag Inline Content Styles
+   ============================================================ */
+
+/* ── Wrapper — provides positioning context for the popover ── */
+
+.bn-tag-wrapper {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* ── Base pill ── */
+
+.bn-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  background: var(--accent-light, #6B2A2A);
+  border: 1px solid var(--accent-light, #6B2A2A);
+  border-radius: 4px;
+  font-size: 11px !important;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif) !important;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #ffffff;
+  vertical-align: middle;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+}
+
+/* ── Unconfigured / placeholder state ── */
+
+.bn-tag--empty {
+  border-style: dashed;
+  background: transparent;
+  color: var(--accent-light, #6B2A2A);
+}
+
+/* ── Editor mode — clickable pill ── */
+
+.bn-tag--editor {
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.bn-tag--editor:hover:not(.bn-tag--empty) {
+  background: var(--accent-emerald-300, #A85A5A);
+  border-color: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-tag--editor.bn-tag--empty:hover {
+  background: rgba(107, 42, 42, 0.08);
+}
+
+/* ── Renderer mode — clickable pill ── */
+
+.bn-tag--renderer {
+  cursor: pointer;
+  transition: filter 0.12s;
+}
+
+.bn-tag--renderer:hover {
+  filter: brightness(1.15);
+}
+
+/* ============================================================
+   Config Popover (editor mode only)
+   ============================================================ */
+
+.bn-tag-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1000;
+  min-width: 260px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #b8b0aa;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+[data-color-scheme="dark"] .bn-tag-popover {
+  background: #272223;
+  border-color: #3e3739;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Label row ── */
+
+.bn-tag-popover-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bn-tag-popover-label {
+  font-size: 11px;
+  color: #8a7e79;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 36px;
+}
+
+/* ── Text inputs ── */
+
+.bn-tag-popover-input {
+  flex: 1;
+  border: 1px solid #b8b0aa;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: #272223;
+  background: #ffffff;
+  outline: none;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bn-tag-popover-input:focus {
+  border-color: #2563eb;
+}
+
+[data-color-scheme="dark"] .bn-tag-popover-input {
+  background: #1e1b1c;
+  border-color: #3e3739;
+  color: #E9E3E0;
+}
+
+/* ── Output type tabs ── */
+
+.bn-tag-output-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.bn-tag-output-tab {
+  flex: 1;
+  padding: 4px;
+  font-size: 11px;
+  border: 1px solid #b8b0aa;
+  border-radius: 4px;
+  background: transparent;
+  color: #5a5050;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.bn-tag-output-tab.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.bn-tag-output-tab:hover:not(.active) {
+  background: #f0ede9;
+}
+
+[data-color-scheme="dark"] .bn-tag-output-tab {
+  border-color: #4a4245;
+  color: #b8b0aa;
+}
+
+[data-color-scheme="dark"] .bn-tag-output-tab:hover:not(.active) {
+  background: #3a3435;
+}
+
+/* ── Output body ── */
+
+.bn-tag-output-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Select dropdown ── */
+
+.bn-tag-output-select {
+  width: 100%;
+  border: 1px solid #b8b0aa;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: #272223;
+  background: #ffffff;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+[data-color-scheme="dark"] .bn-tag-output-select {
+  background: #1e1b1c;
+  border-color: #3e3739;
+  color: #E9E3E0;
+}
+
+/* ── Actions row ── */
+
+.bn-tag-popover-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bn-tag-popover-apply {
+  padding: 5px 14px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.bn-tag-popover-apply:hover {
+  background: #1d4ed8;
+}
+
+.bn-tag-popover-cancel {
+  font-size: 11px;
+  color: #8a7e79;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.bn-tag-popover-cancel:hover {
+  color: #272223;
+}
+
+[data-color-scheme="dark"] .bn-tag-popover-cancel:hover {
+  color: #E9E3E0;
+}

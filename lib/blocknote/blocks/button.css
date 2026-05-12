@@ -1,0 +1,374 @@
+/* ============================================================
+   Button Block Styles
+   ============================================================ */
+
+/* ---- Outer wrapper (column layout: button + editor badge) ---- */
+
+/* align and justifyContent are set via inline style from the align prop */
+.bn-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-block: 10px;
+}
+
+.bn-button-wrapper.bn-no-padding {
+  margin-block: 0;
+}
+
+/* ---- Button element ---- */
+
+/* width is set via inline style from the buttonWidth prop */
+.bn-button-block {
+  position: relative; /* needed for the renderer-mode click overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  user-select: none;
+}
+
+.bn-button-block--editable {
+  cursor: text;
+  user-select: text;
+}
+
+.bn-button-block:not(.bn-button-block--editable):hover {
+  filter: brightness(0.88);
+}
+
+/* ---- Inline-content area (the editable / rendered text) ---- */
+
+.bn-button-content {
+  flex: 1;
+  text-align: center;
+  outline: none;
+  min-width: 40px;
+}
+
+/* ---- Editor-only badge below the button ---- */
+
+.bn-button-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 0 5px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #666;
+  opacity: 0.65;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-color-scheme="dark"] .bn-button-badge {
+  color: #aaa;
+}
+
+/* ============================================================
+   Toolbar Popover — Output Type Selector
+   ============================================================ */
+
+.bn-button-output-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 8px 6px;
+}
+
+.bn-button-output-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  flex: 1;
+  white-space: nowrap;
+}
+
+[data-color-scheme="dark"] .bn-button-output-tab {
+  border-color: #444;
+  color: #ccc;
+}
+
+.bn-button-output-tab:hover {
+  background: #f0f0f0;
+}
+
+[data-color-scheme="dark"] .bn-button-output-tab:hover {
+  background: #2a2a2a;
+}
+
+.bn-button-output-tab.active {
+  background: var(--accent-light, #6B2A2A);
+  border-color: var(--accent-light, #6B2A2A);
+  color: #fff;
+}
+
+.bn-button-output-body {
+  padding: 6px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 300px;
+}
+
+.bn-button-url-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bn-button-url-apply {
+  padding: 6px 14px;
+  background: var(--accent-light, #6B2A2A);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.bn-button-url-apply:hover {
+  background: var(--accent-emerald-300, #A85A5A);
+}
+
+.bn-button-output-select {
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+}
+
+[data-color-scheme="dark"] .bn-button-output-select {
+  background: #1c1c1c;
+  border-color: #444;
+  color: #ddd;
+}
+
+.bn-button-output-select:focus {
+  border-color: var(--accent-light, #6B2A2A);
+}
+
+.bn-button-output-hint {
+  font-size: 11px;
+  color: #888;
+  padding: 0 2px;
+  text-align: center;
+}
+
+/* ============================================================
+   Toolbar Popover — Color Picker
+   ============================================================ */
+
+.bn-button-color-popover {
+  padding: 10px 10px 12px;
+  min-width: 220px;
+}
+
+.bn-button-color-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.bn-button-color-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.bn-button-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s;
+  outline: none;
+}
+
+.bn-button-color-swatch:hover {
+  transform: scale(1.18);
+}
+
+.bn-button-color-swatch.active {
+  border-color: var(--accent-light, #6B2A2A);
+}
+
+/* White swatch needs a visible border */
+.bn-button-color-swatch[data-color="#ffffff"] {
+  border-color: #e0e0e0;
+}
+
+.bn-button-color-swatch[data-color="#ffffff"].active {
+  border-color: var(--accent-light, #6B2A2A);
+}
+
+.bn-button-color-divider {
+  height: 1px;
+  background: #eee;
+  margin: 6px 0;
+}
+
+[data-color-scheme="dark"] .bn-button-color-divider {
+  background: #333;
+}
+
+.bn-button-color-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.bn-button-color-custom-label {
+  font-size: 12px;
+  color: #555;
+  flex-shrink: 0;
+}
+
+[data-color-scheme="dark"] .bn-button-color-custom-label {
+  color: #bbb;
+}
+
+.bn-button-color-custom-input {
+  width: 36px;
+  height: 28px;
+  padding: 2px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+[data-color-scheme="dark"] .bn-button-color-custom-input {
+  border-color: #444;
+}
+
+.bn-button-color-reset {
+  font-size: 11px;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  margin-left: auto;
+}
+
+.bn-button-color-reset:hover {
+  color: #333;
+}
+
+[data-color-scheme="dark"] .bn-button-color-reset:hover {
+  color: #ddd;
+}
+
+/* ---- Renderer-mode click overlay ---- */
+/* Transparent div that covers the entire button in renderer mode.
+   contentEditable={false} prevents ProseMirror from intercepting the click;
+   z-index ensures it sits above the contentRef text layer. */
+
+.bn-button-click-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: pointer;
+  border-radius: inherit;
+}
+
+/* ============================================================
+   Toolbar Popover — Width Control
+   ============================================================ */
+
+.bn-button-width-popover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 10px;
+  min-width: 200px;
+}
+
+.bn-button-width-label {
+  font-size: 12px;
+  color: #555;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+[data-color-scheme="dark"] .bn-button-width-label {
+  color: #bbb;
+}
+
+.bn-button-width-input {
+  width: 72px;
+  padding: 5px 7px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+  color: #333;
+  outline: none;
+  flex-shrink: 0;
+}
+
+[data-color-scheme="dark"] .bn-button-width-input {
+  background: #1c1c1c;
+  border-color: #444;
+  color: #ddd;
+}
+
+.bn-button-width-input:focus {
+  border-color: var(--accent-light, #6B2A2A);
+}
+
+.bn-button-width-apply {
+  padding: 5px 12px;
+  background: var(--accent-light, #6B2A2A);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-ui, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.bn-button-width-apply:hover {
+  background: var(--accent-emerald-300, #A85A5A);
+}
