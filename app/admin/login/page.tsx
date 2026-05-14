@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
     setIsLoading(true)
 
     const supabase = createClient()
-    const redirectTo = `${window.location.origin}/admin`
+    const redirectTo = `${window.location.origin}/auth/callback`
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

@@ -1,6 +1,6 @@
-# Beregovskiy Portfolio
+# Mongelt File
 
-Personal portfolio website built with Next.js. Includes a public-facing site and a private admin panel for managing all content.
+Personal portfolio website built with Next.js. Includes a public-facing site and a private admin panel for managing all content. Vibe coded with Cursor and Claude Code.
 
 ## Tech stack
 
@@ -40,15 +40,6 @@ lib/                  # Shared utilities
   seo/                # SEO helpers
 public/               # Static assets
 ```
-
-## Running locally
-
-1. `npm install`
-2. Create `.env.local` with your Supabase and Cloudinary credentials
-3. `npm run dev`
-4. Open http://localhost:3000
-
-Admin panel is at `/admin` — requires Google OAuth login via Supabase Auth.
 
 ## Credits
 

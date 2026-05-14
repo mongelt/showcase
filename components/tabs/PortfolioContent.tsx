@@ -430,7 +430,9 @@ export default function PortfolioContent({
         link_options(id, option_text),
         content_collections(collection_id, collections(slug, name))
       `)
-    const { data, error } = await query.order('order_index', { ascending: true })
+    const { data, error } = await query
+      .eq('featured', true)
+      .order('order_index', { ascending: true })
     
     if (error) {
       throw new Error(`Failed to load content: ${error.message}`)

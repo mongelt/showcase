@@ -282,6 +282,46 @@ export default function EditContent() {
     }
   }
 
+  async function reuploadExternalImages(blocks: PartialBlock[]): Promise<PartialBlock[]> {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+
+    async function processBlock(block: PartialBlock): Promise<PartialBlock> {
+      let processedChildren = block.children
+      if (Array.isArray(block.children) && block.children.length > 0)
+        processedChildren = await Promise.all(block.children.map(processBlock))
+
+      if (
+        block.type === 'image' &&
+        typeof block.props?.url === 'string' &&
+        block.props.url.trim() !== '' &&
+        !block.props.url.includes('res.cloudinary.com')
+      ) {
+        try {
+          const proxyRes = await fetch(`/api/proxy-image?url=${encodeURIComponent(block.props.url)}`)
+          if (!proxyRes.ok) throw new Error(`Proxy ${proxyRes.status}`)
+          const blob = await proxyRes.blob()
+          const ext = blob.type.split('/')[1] || 'jpg'
+          const formData = new FormData()
+          formData.append('file', new File([blob], `image.${ext}`, { type: blob.type }))
+          formData.append('upload_preset', uploadPreset!)
+          const upRes = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+            { method: 'POST', body: formData }
+          )
+          const upData = await upRes.json()
+          if (upData.secure_url)
+            return { ...block, props: { ...block.props, url: upData.secure_url }, children: processedChildren }
+        } catch (err) {
+          console.warn('Failed to re-upload image:', err)
+        }
+      }
+      return { ...block, children: processedChildren }
+    }
+
+    return Promise.all(blocks.map(processBlock))
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     
@@ -303,22 +343,30 @@ export default function EditContent() {
     try {
       // BlockNote: data is already in editorData from onChange callback
       const latestEditorData = editorData
-      
-      // Extract image sizes from BlockNote image blocks
+
+      // Re-upload any external images to Cloudinary before saving
+      let processedEditorData = latestEditorData
+      if (contentType === 'article' && latestEditorData?.length) {
+        try {
+          processedEditorData = await reuploadExternalImages(latestEditorData)
+        } catch (err) {
+          console.warn('Image re-upload failed, saving original data:', err)
+        }
+      }
+
+      // Extract image sizes from BlockNote image blocks (use processedEditorData so URLs match Cloudinary keys)
       let imageSizeMap: Record<string, { width?: number; height?: number }> | null = null
-      if (contentType === 'article' && editorData) {
+      if (contentType === 'article' && processedEditorData) {
         imageSizeMap = {}
-        editorData.forEach((block) => {
+        processedEditorData.forEach((block) => {
           if (block.type === 'image' && block.props?.url) {
             const url = block.props.url as string
             const width = block.props.previewWidth as number | undefined
             if (width) {
-              // Only store width - browser will calculate height to maintain aspect ratio
               imageSizeMap![url] = { width }
             }
           }
         })
-        // Set to null if no images found (matches original behavior)
         if (imageSizeMap && Object.keys(imageSizeMap).length === 0) {
           imageSizeMap = null
         }
@@ -335,7 +383,7 @@ export default function EditContent() {
           sidebar_title: sidebarTitle || null,
           sidebar_subtitle: sidebarSubtitle || null,
           image_sizes: contentType === 'article' ? imageSizeMap : null,
-          content_body: contentType === 'article' ? (latestEditorData || editorData) : null,
+          content_body: contentType === 'article' ? (processedEditorData || editorData) : null,
           image_url: contentType === 'image' ? imageUrl : null,
           video_url: contentType === 'video' ? videoUrl : null,
           audio_url: contentType === 'audio' ? audioUrl : null,

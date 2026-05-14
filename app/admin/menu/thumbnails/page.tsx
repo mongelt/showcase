@@ -415,12 +415,35 @@ function ArticleCaptureTool({
     setStatus(null)
     setPreviewUrl(null)
 
+    // Replace iframes with static placeholders — html2canvas can't capture cross-origin iframes
+    const wrappers = Array.from(
+      captureRef.current.querySelectorAll<HTMLElement>('.bn-embed-video-wrapper')
+    )
+    const originals = new Map<HTMLElement, string>()
+
+    for (const wrapper of wrappers) {
+      originals.set(wrapper, wrapper.innerHTML)
+      const iframe = wrapper.querySelector<HTMLIFrameElement>('iframe')
+      const src = iframe?.src ?? ''
+      const ytMatch = src.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/)
+      if (ytMatch) {
+        wrapper.innerHTML = `<img src="https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;" alt="YouTube video">`
+      } else {
+        wrapper.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f0f0f0;border:1px solid #ddd;padding:12px;box-sizing:border-box;"><p style="margin:0;font-size:13px;color:#666;text-align:center;word-break:break-all;">[Embedded content]${src ? '<br>' + src : ''}</p></div>`
+      }
+    }
+
+    // Wait for newly inserted images to load before capturing
+    const imgs = Array.from(captureRef.current.querySelectorAll<HTMLImageElement>('img'))
+    await Promise.all(imgs.map(img =>
+      img.complete ? Promise.resolve() : new Promise<void>(r => { img.onload = r; img.onerror = r })
+    ))
+
     try {
       const html2canvas = (await import('html2canvas')).default
       await document.fonts.ready
 
-      const visibleScrollTop = scrollRef.current?.scrollTop ?? 0
-      const captureScrollY = visibleScrollTop / CONTENT_ZOOM
+      const captureScrollY = (scrollRef.current?.scrollTop ?? 0) / CONTENT_ZOOM
 
       const canvas = await html2canvas(captureRef.current, {
         useCORS: true,
@@ -439,6 +462,9 @@ function ArticleCaptureTool({
       console.error('Capture error:', err)
       setStatus('Capture failed — see console')
       setCapturing(false)
+    } finally {
+      // Always restore original iframe HTML
+      for (const [wrapper, html] of originals) wrapper.innerHTML = html
     }
   }
 
