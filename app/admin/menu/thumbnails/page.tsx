@@ -436,7 +436,7 @@ function ArticleCaptureTool({
     // Wait for newly inserted images to load before capturing
     const imgs = Array.from(captureRef.current.querySelectorAll<HTMLImageElement>('img'))
     await Promise.all(imgs.map(img =>
-      img.complete ? Promise.resolve() : new Promise<void>(r => { img.onload = r; img.onerror = r })
+      img.complete ? Promise.resolve() : new Promise<void>(r => { img.onload = () => r(); img.onerror = () => r() })
     ))
 
     try {
