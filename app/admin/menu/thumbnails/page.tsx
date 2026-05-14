@@ -415,22 +415,34 @@ function ArticleCaptureTool({
     setStatus(null)
     setPreviewUrl(null)
 
-    // Replace iframes with static placeholders — html2canvas can't capture cross-origin iframes
-    const wrappers = Array.from(
-      captureRef.current.querySelectorAll<HTMLElement>('.bn-embed-video-wrapper')
-    )
+    // Replace embed wrappers with static placeholders — html2canvas can't capture cross-origin iframes
     const originals = new Map<HTMLElement, string>()
 
-    for (const wrapper of wrappers) {
+    // YouTube and generic iframes — inside .bn-embed-video-wrapper (height:0 + padding-bottom aspect-ratio)
+    const videoWrappers = Array.from(
+      captureRef.current.querySelectorAll<HTMLElement>('.bn-embed-video-wrapper')
+    )
+    for (const wrapper of videoWrappers) {
       originals.set(wrapper, wrapper.innerHTML)
       const iframe = wrapper.querySelector<HTMLIFrameElement>('iframe')
       const src = iframe?.src ?? ''
       const ytMatch = src.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/)
       if (ytMatch) {
-        wrapper.innerHTML = `<img src="https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;" alt="YouTube video">`
+        // background-image + background-size:cover — html2canvas supports this correctly.
+        // <img object-fit:cover> is NOT supported by html2canvas and causes stretching.
+        wrapper.innerHTML = `<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:url(https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg) center/cover no-repeat;"></div>`
       } else {
-        wrapper.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f0f0f0;border:1px solid #ddd;padding:12px;box-sizing:border-box;"><p style="margin:0;font-size:13px;color:#666;text-align:center;word-break:break-all;">[Embedded content]${src ? '<br>' + src : ''}</p></div>`
+        wrapper.innerHTML = `<div style="position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#f0f0f0;border:1px solid #ddd;padding:12px;box-sizing:border-box;"><p style="margin:0;font-size:13px;color:#666;text-align:center;word-break:break-all;">[Embedded content]${src ? '<br>' + src : ''}</p></div>`
       }
+    }
+
+    // Instagram — inside .bn-embed-instagram-wrapper (different class, contains blockquote not iframe)
+    const igWrappers = Array.from(
+      captureRef.current.querySelectorAll<HTMLElement>('.bn-embed-instagram-wrapper')
+    )
+    for (const wrapper of igWrappers) {
+      originals.set(wrapper, wrapper.innerHTML)
+      wrapper.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;width:100%;min-height:120px;background:#f0f0f0;border:1px solid #ddd;padding:12px;box-sizing:border-box;"><p style="margin:0;font-size:13px;color:#666;text-align:center;">[Instagram embed]</p></div>`
     }
 
     // Wait for newly inserted images to load before capturing
@@ -582,8 +594,7 @@ function ArticleCaptureTool({
               alt="Captured thumbnail preview"
               style={{
                 width: CROP_W / 2,
-                height: CROP_H / 2,
-                objectFit: 'cover',
+                height: 'auto',
                 border: '1px solid #374151',
                 borderRadius: 4,
               }}
