@@ -10,6 +10,7 @@ import { DynamicMenu } from '@/components/dynamic-menu/DynamicMenu'
 import { Skeleton } from '@/components/ui/skeleton'
 import Loader from '@/components/Loader'
 import { useMobileState } from '@/lib/responsive'
+import { track } from '@/lib/umami'
 
 
 type PageState = 'expanded-empty' | 'expanded-reader' | 'collapsed-reader'
@@ -1115,6 +1116,7 @@ export default function PortfolioContent({
   }, [selectedSubcategory, selectedContent, pageState])
 
   const handleContentSelect = useCallback((content: ContentItem) => {
+    track('content_view', { title: content.title, id: content.id, type: content.type })
     justWentBackRef.current = false
     setJustWentBackFromContent(false) // Clear flag when selecting content
     if (selectedContent?.id === content.id) {
@@ -1192,6 +1194,7 @@ export default function PortfolioContent({
   }, [onCollectionClick])
 
   const handleCollectionSelect = useCallback((collection: Collection, thumbnails: string[] = []) => {
+    track('collection_view', { title: collection.name, id: collection.id, slug: collection.slug })
     setSelectedCollection(collection)
     setSelectedCollectionThumbnails(thumbnails)
     setSelectedContent(null) // cannot coexist with active content

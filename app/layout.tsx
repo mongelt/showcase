@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, JetBrains_Mono, Crimson_Pro, Public_Sans } from 'next/font/google'
+import Script from 'next/script'
 import "./globals.css";
 import { fetchSeoData, buildSchema } from '@/lib/seo/schema'
 
@@ -86,6 +87,11 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="99d875b4-bab3-46be-8579-ea9778ac84ed"
+          strategy="afterInteractive"
         />
         {children}
       </body>

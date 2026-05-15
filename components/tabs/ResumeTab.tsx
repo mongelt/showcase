@@ -10,6 +10,7 @@ import { useReducedMotion, dmTransition } from '@/lib/animations'
 import { RESUME_SIDE_CARD_WIDTH_PX, RESUME_CENTER_CARD_WIDTH_PX, RESUME_SIDE_CARD_OFFSET_PX } from '@/lib/constants'
 import Loader from '@/components/Loader'
 import { cloudinaryCrop } from '@/lib/utils'
+import { track } from '@/lib/umami'
 
 const TIMELINE_TOP_OFFSET = 0
 
@@ -386,6 +387,10 @@ export default function ResumeTab({
   }, [])
   
   const toggleExpand = useCallback((entryId: string) => {
+    if (!expandedEntries.has(entryId)) {
+      const entry = transformedEntries.find(e => e.id === entryId)
+      track('resume_entry_expand', { id: entryId, title: entry?.title })
+    }
     setExpandedEntries(prev => {
       const next = new Set(prev)
       if (next.has(entryId)) {
@@ -395,7 +400,7 @@ export default function ResumeTab({
       }
       return next
     })
-  }, [])
+  }, [expandedEntries, transformedEntries])
 
   const hasExpandedSideEntry = useMemo(() => {
     if (!sideEntries.length) return false

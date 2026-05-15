@@ -6,6 +6,7 @@ import { tapScale, useReducedMotion } from '@/lib/animations'
 import { useMobileState } from '@/lib/responsive'
 import { DownloadCard } from '@/components/dynamic-menu/cards/DownloadCard'
 import { CollectionDownloadCard } from '@/components/dynamic-menu/cards/CollectionDownloadCard'
+import { track } from '@/lib/umami'
 
 type Collection = {
   slug: string
@@ -159,6 +160,13 @@ export default function BottomTabBar({
 
   async function handleDownload(target: 'resume' | 'content' | 'collection', includeResume = false) {
     if (downloadStatus === 'loading') return
+    if (target === 'resume') {
+      track('download_resume')
+    } else if (target === 'content') {
+      track('download_content', { title: currentContentTitle, id: currentContentId, type: currentContentType, with_resume: includeResume })
+    } else if (target === 'collection') {
+      track('download_collection', { title: currentCollectionName, slug: currentCollectionSlug, with_resume: includeResume })
+    }
     try {
       setDownloadStatus('loading')
       if (onDownload) {
@@ -217,7 +225,11 @@ export default function BottomTabBar({
           <div className="relative">
             <button
               ref={downloadBtnRef}
-              onClick={() => setDownloadsOpen(prev => !prev)}
+              onClick={() => {
+                const next = !downloadsOpen
+                setDownloadsOpen(next)
+                if (next) track('downloads_menu_open')
+              }}
               className={`dl-btn flex items-center gap-[10px] rounded-[5px] cursor-pointer transition-all duration-300 border-none outline-none ${
                 isMobile ? 'h-[40px] px-[10px]' : 'h-[45px] px-[15px]'
               } ${
@@ -384,6 +396,13 @@ export default function BottomTabBar({
                         handleShareCopy(row.value)
                         setShareCopiedKey(row.key)
                         setTimeout(() => setShareCopiedKey(null), 5000)
+                        if (row.key === 'portfolio') {
+                          track('share_copy', { type: 'portfolio' })
+                        } else if (row.key === 'content') {
+                          track('share_copy', { type: 'content', title: currentContentTitle, id: currentContentId })
+                        } else if (row.key === 'collection') {
+                          track('share_copy', { type: 'collection', title: currentCollectionName, slug: currentCollectionSlug })
+                        }
                       }}
                       className="w-full font-body text-sm font-semibold rounded-md transition-all duration-200 text-text-body bg-bg-card hover:bg-bg-card-alt text-left"
                       style={{ padding: '8px 12px' }}

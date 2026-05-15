@@ -9,6 +9,7 @@ import MobileBanner from '@/components/MobileBanner'
 import LoadingState from '@/components/LoadingState'
 import { createClient } from '@/lib/supabase/client'
 import { useMobileState } from '@/lib/responsive'
+import { track } from '@/lib/umami'
 
 const ResumeTab = dynamic(() => import('@/components/tabs/ResumeTab'), { ssr: false })
 
@@ -259,6 +260,8 @@ export default function HomeClient() {
 
   const handleTabChange = (tab: string) => {
     if (urlAnimatingRef.current) return
+    if (tab === 'portfolio') track('tab_view_portfolio')
+    else if (tab === 'resume') track('tab_view_resume')
     // Collapse profile whenever Portfolio or Resume is clicked
     if ((tab === 'portfolio' || tab === 'resume') && profileRef.current) {
       profileRef.current.collapse()
@@ -642,7 +645,10 @@ export default function HomeClient() {
         onHeightChange={setProfileHeight}
         onOpenCollection={handleOpenCollection}
         condensedMode={shouldCondenseProfile}
-        onExpandedChange={setIsProfileExpanded}
+        onExpandedChange={(expanded) => {
+          setIsProfileExpanded(expanded)
+          if (expanded) track(`profile_expand_${activeTab}`)
+        }}
         onSwitchToPortfolio={handleSwitchToPortfolio}
         onSwitchToResume={(entryId?: string) => { setResumeFocusEntryId(entryId ?? null); handleTabChange('resume') }}
         onCardSelect={!isMobile ? (id, type) => { setActiveTab('portfolio'); setExternalMenuCardSelect({ id, type }) } : undefined}
