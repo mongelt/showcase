@@ -18,6 +18,7 @@ type ProfileSnap = {
   job_title_3: string | null
   job_title_4: string | null
   short_bio: any
+  short_bio_loading_margin_top: number | null
 }
 
 function isBlockNoteFormat(data: any): boolean {
@@ -72,7 +73,7 @@ export default function LoadingState({ onDone }: { onDone: () => void }) {
     supabase
       .from('profile')
       .select(
-        'full_name, location, job_title_1, job_title_2, job_title_3, job_title_4, short_bio'
+        'full_name, location, job_title_1, job_title_2, job_title_3, job_title_4, short_bio, short_bio_loading_margin_top'
       )
       .limit(1)
       .single()
@@ -180,7 +181,7 @@ export default function LoadingState({ onDone }: { onDone: () => void }) {
         {/* Right block: short bio — width capped so it doesn't run off screen */}
         <motion.div
           className="font-body text-sm text-text-on-dark-secondary leading-relaxed"
-          style={{ width: '22vw', maxWidth: '380px' }}
+          style={{ width: '22vw', maxWidth: '380px', ...(profile?.short_bio_loading_margin_top != null ? { marginTop: profile.short_bio_loading_margin_top } : {}) }}
           initial={{ opacity: 0 }}
           animate={{ opacity: showDetails ? 1 : 0 }}
           transition={{ duration: 0.5 }}

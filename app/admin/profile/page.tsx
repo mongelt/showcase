@@ -39,6 +39,8 @@ export default function ProfileManagement() {
   const [shortBioData, setShortBioData] = useState<PartialBlock[] | undefined>()
   const [fullBioData, setFullBioData] = useState<PartialBlock[] | undefined>()
   const [collapsedProfileHeight, setCollapsedProfileHeight] = useState<string>('') // pixels
+  const [shortBioMarginTop, setShortBioMarginTop] = useState<string>('')
+  const [shortBioLoadingMarginTop, setShortBioLoadingMarginTop] = useState<string>('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [linkedin, setLinkedin] = useState('')
@@ -87,6 +89,12 @@ export default function ProfileManagement() {
         profileData.collapsed_profile_height !== null && profileData.collapsed_profile_height !== undefined
           ? String(profileData.collapsed_profile_height)
           : ''
+      )
+      setShortBioMarginTop(
+        profileData.short_bio_margin_top != null ? String(profileData.short_bio_margin_top) : ''
+      )
+      setShortBioLoadingMarginTop(
+        profileData.short_bio_loading_margin_top != null ? String(profileData.short_bio_loading_margin_top) : ''
       )
       setEmail(profileData.email || '')
       setPhone(profileData.phone || '')
@@ -165,6 +173,20 @@ export default function ProfileManagement() {
       }
     }
 
+    const parsedShortBioMarginTop =
+      shortBioMarginTop.trim() === '' ? null : Math.floor(Number(shortBioMarginTop))
+    if (parsedShortBioMarginTop !== null && (Number.isNaN(parsedShortBioMarginTop) || parsedShortBioMarginTop < 0)) {
+      alert('Short bio margin-top must be a non-negative number (pixels).')
+      return
+    }
+
+    const parsedShortBioLoadingMarginTop =
+      shortBioLoadingMarginTop.trim() === '' ? null : Math.floor(Number(shortBioLoadingMarginTop))
+    if (parsedShortBioLoadingMarginTop !== null && (Number.isNaN(parsedShortBioLoadingMarginTop) || parsedShortBioLoadingMarginTop < 0)) {
+      alert('Short bio loading state margin-top must be a non-negative number (pixels).')
+      return
+    }
+
     if (!portfolioCard1) {
       alert('Portfolio Card 1 is required.')
       return
@@ -216,6 +238,8 @@ export default function ProfileManagement() {
       full_bio: fullBioData,
       full_bio_image_sizes: fullBioImageSizes,
       collapsed_profile_height: parsedHeight,
+      short_bio_margin_top: parsedShortBioMarginTop,
+      short_bio_loading_margin_top: parsedShortBioLoadingMarginTop,
       email: email,
       phone: phone,
       linkedin: linkedin,
@@ -276,6 +300,38 @@ export default function ProfileManagement() {
             />
             <p className="text-xs text-gray-500 mt-1">
               Sets the collapsed Profile card height in pixels; overflow is clipped.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Short bio margin-top (px)
+            </label>
+            <Input
+              type="number"
+              min={0}
+              value={shortBioMarginTop}
+              onChange={(e) => setShortBioMarginTop(e.target.value)}
+              placeholder="e.g., 24"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Pushes the short bio down in the desktop profile card. Leave empty for no margin.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Short bio loading state margin-top (px)
+            </label>
+            <Input
+              type="number"
+              min={0}
+              value={shortBioLoadingMarginTop}
+              onChange={(e) => setShortBioLoadingMarginTop(e.target.value)}
+              placeholder="e.g., 24"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Pushes the short bio down in the loading screen. Leave empty for no margin.
             </p>
           </div>
 

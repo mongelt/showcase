@@ -30,6 +30,8 @@ type ProfileData = {
   education: string | null
   jhu_entry_id: string | null
   collapsed_profile_height: number | null
+  short_bio_margin_top?: number | null
+  short_bio_loading_margin_top?: number | null
   portfolio_plane_cards: Array<{ type: string; id: string }> | null
   resume_plane_cards: string[] | null
 }
@@ -94,7 +96,16 @@ function ShortBioRenderer({ data }: { data: any }) {
   }
   
   if (isBlockNoteFormat(data)) {
-    return <BlockNoteRenderer data={data} />
+    return (
+      <div style={{
+        '--text-body': 'var(--text-on-dark-secondary)',
+        '--text-headings': 'var(--text-on-dark)',
+        '--text-secondary': 'var(--text-on-dark-secondary)',
+        '--text-metadata': 'var(--text-on-dark-inactive)',
+      } as React.CSSProperties}>
+        <BlockNoteRenderer data={data} />
+      </div>
+    )
   }
 
   return null
@@ -473,7 +484,7 @@ const Profile = forwardRef<ProfileRef, ProfileProps>(({
                     exit={{ opacity: 0 }}
                     transition={{ duration: reduced ? 0 : 0.38, ease: 'easeInOut' }}
                   >
-                    <div className="font-body text-sm text-text-on-dark-secondary leading-relaxed" style={{ lineHeight: '1.625' }}>
+                    <div className="font-body text-sm text-text-on-dark-secondary leading-relaxed" style={{ lineHeight: '1.625', ...(profile.short_bio_margin_top != null ? { marginTop: profile.short_bio_margin_top } : {}) }}>
                       {profile.short_bio ? (
                         isBlockNoteFormat(profile.short_bio) ? (
                           <ShortBioRenderer data={profile.short_bio} />
@@ -662,7 +673,7 @@ const Profile = forwardRef<ProfileRef, ProfileProps>(({
                     {profile.job_title_4 && <p>{profile.job_title_4}</p>}
                   </div>
                 </div>
-                <div className="w-[40%] font-body text-sm text-text-on-dark-secondary" style={{ lineHeight: '1.625' }}>
+                <div className="w-[40%] font-body text-sm text-text-on-dark-secondary" style={{ lineHeight: '1.625', ...(profile.short_bio_margin_top != null ? { marginTop: profile.short_bio_margin_top } : {}) }}>
                   {profile.short_bio ? (
                     isBlockNoteFormat(profile.short_bio) ? (
                       <ShortBioRenderer data={profile.short_bio} />
