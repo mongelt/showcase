@@ -52,6 +52,7 @@ import {
 import { CategoryPlane, ScoredCategory } from './CategoryPlane'
 import { ContentPlane } from './ContentPlane'
 import { CollectionPlane } from './CollectionPlane'
+import { shuffleCopy } from '@/lib/utils'
 
 // ---------------------------------------------------------------------------
 // Prop types — minimal interfaces matching PortfolioContent's local types
@@ -265,10 +266,9 @@ export function DynamicMenu({
     if (onCollectionSelect) {
       const col = collections.find(c => c.id === collectionId)
       if (col) {
-        const thumbnails = content
-          .filter(c => c.collection_slugs?.includes(col.slug) && (c.menu_thumbnail_url || c.image_url))
-          .slice(0, 5)
-          .map(c => (c.menu_thumbnail_url ?? c.image_url)!)
+        const thumbnails = shuffleCopy(
+          content.filter(c => c.collection_slugs?.includes(col.slug) && (c.menu_thumbnail_url || c.image_url))
+        ).slice(0, 5).map(c => (c.menu_thumbnail_url ?? c.image_url)!)
         onCollectionSelect(col, thumbnails)
       }
     }
@@ -450,10 +450,9 @@ export function DynamicMenu({
         const subcatIds = catToSubcatIds.get(cat.id) ?? new Set<string>()
         // Thumbnails: up to 5 from content in this category, preferring menu_thumbnail_url.
         // Filter by subcategory_id (direct DB column) — more reliable than category_id.
-        const thumbnails = content
-          .filter(c => subcatIds.has(c.subcategory_id ?? '') && (c.menu_thumbnail_url || c.image_url))
-          .slice(0, 5)
-          .map(c => (c.menu_thumbnail_url ?? c.image_url)!)
+        const thumbnails = shuffleCopy(
+          content.filter(c => subcatIds.has(c.subcategory_id ?? '') && (c.menu_thumbnail_url || c.image_url))
+        ).slice(0, 5).map(c => (c.menu_thumbnail_url ?? c.image_url)!)
         return {
           id: cat.id,
           name: cat.name,
@@ -480,10 +479,9 @@ export function DynamicMenu({
       periDesc: sub.peri_desc ?? undefined,
       desc: sub.desc ?? undefined,
       collectionIds: Array.from(subcategoryCollectionIds.get(sub.id) ?? []),
-      thumbnails: contentWithCollectionIds
-        .filter(c => c.subcategory_id === sub.id && (c.menu_thumbnail_url || c.image_url))
-        .slice(0, 5)
-        .map(c => (c.menu_thumbnail_url ?? c.image_url)!),
+      thumbnails: shuffleCopy(
+        contentWithCollectionIds.filter(c => c.subcategory_id === sub.id && (c.menu_thumbnail_url || c.image_url))
+      ).slice(0, 5).map(c => (c.menu_thumbnail_url ?? c.image_url)!),
     }))
   }, [subcategories, subcategoryCollectionIds, contentWithCollectionIds])
 
@@ -558,10 +556,9 @@ export function DynamicMenu({
       desc: c.desc ?? undefined,
       featured: c.featured,
       order_index: c.order_index,
-      thumbnails: contentWithCollectionIds
-        .filter(item => item.collectionIds.includes(c.id) && (item.menu_thumbnail_url || item.image_url))
-        .slice(0, 5)
-        .map(item => (item.menu_thumbnail_url ?? item.image_url)!),
+      thumbnails: shuffleCopy(
+        contentWithCollectionIds.filter(item => item.collectionIds.includes(c.id) && (item.menu_thumbnail_url || item.image_url))
+      ).slice(0, 5).map(item => (item.menu_thumbnail_url ?? item.image_url)!),
     }))
   }, [collections, contentWithCollectionIds])
 
@@ -703,10 +700,9 @@ export function DynamicMenu({
     // Fallback to raw subcategory — derive thumbnails from content
     const raw = subcategories.find(s => s.id === id)
     if (!raw) return null
-    const thumbnails = contentWithCollectionIds
-      .filter(c => c.subcategory_id === id && (c.menu_thumbnail_url || c.image_url))
-      .slice(0, 5)
-      .map(c => (c.menu_thumbnail_url ?? c.image_url)!)
+    const thumbnails = shuffleCopy(
+      contentWithCollectionIds.filter(c => c.subcategory_id === id && (c.menu_thumbnail_url || c.image_url))
+    ).slice(0, 5).map(c => (c.menu_thumbnail_url ?? c.image_url)!)
     return { id: raw.id, name: raw.name, score: 0.8, thumbnails }
   }, [menuState.activeSubcategoryId, menuState.activeContentId, content, subcategories, scoredSubcategories, contentWithCollectionIds])
 
@@ -740,10 +736,9 @@ export function DynamicMenu({
     const collection = collections.find(c => c.id === collectionId)
     if (!collection) return null
     const sr = scoreMap.get(collectionId)
-    const thumbnails = contentWithCollectionIds
-      .filter(c => c.collectionIds.includes(collectionId) && (c.menu_thumbnail_url || c.image_url))
-      .slice(0, 5)
-      .map(c => (c.menu_thumbnail_url ?? c.image_url)!)
+    const thumbnails = shuffleCopy(
+      contentWithCollectionIds.filter(c => c.collectionIds.includes(collectionId) && (c.menu_thumbnail_url || c.image_url))
+    ).slice(0, 5).map(c => (c.menu_thumbnail_url ?? c.image_url)!)
     return {
       id: collectionId,
       name: collection.name,

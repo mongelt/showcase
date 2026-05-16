@@ -1,6 +1,6 @@
 # Mongelt File
 
-Personal portfolio website built with Next.js. Includes a public-facing site and a private admin panel for managing all content.
+Personal portfolio website built with Next.js. Includes a public-facing site and a private admin panel for managing all content. Vibe coded with Cursor and Claude Code. 
 
 ## Tech stack
 
@@ -50,4 +50,4 @@ public/               # Static assets
 - Loader original by Nawsome / [UIVerse](https://uiverse.io/Nawsome/kind-mole-87)
 - Typewriter effect by akshat-patel28 / [UIVerse](https://uiverse.io/akshat-patel28/cold-impala-14)
 
-Website uses official logos of Johns Hopkins University, Axway Inc., and The LCB.
+Website uses the official logo of Johns Hopkins University.

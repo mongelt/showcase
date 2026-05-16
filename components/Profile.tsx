@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/lib/animations'
 import { useMobileState } from '@/lib/responsive'
 import { BOTTOM_NAV_HEIGHT_PX } from '@/lib/constants'
+import { shuffleCopy } from '@/lib/utils'
 import { ProfilePlanes, type ProfileNavCard, type ProfileResumeCard } from '@/components/ProfilePlanes'
 import Link from 'next/link'
 
@@ -288,22 +289,22 @@ const Profile = forwardRef<ProfileRef, ProfileProps>(({
         if (card.type === 'category') {
           const { data } = await supabase.from('categories').select('id, name, short_desc, desc').eq('id', card.id).single()
           if (!data) return null
-          const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').eq('category_id', card.id).order('order_index', { ascending: true }).limit(5)
-          return { id: data.id, name: data.name, shortDesc: (data as any).short_desc ?? null, desc: (data as any).desc ?? null, thumbnails: imgs?.map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean) ?? [], type: 'category' as const }
+          const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').eq('category_id', card.id).order('order_index', { ascending: true }).limit(20)
+          return { id: data.id, name: data.name, shortDesc: (data as any).short_desc ?? null, desc: (data as any).desc ?? null, thumbnails: shuffleCopy((imgs ?? []).map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean)).slice(0, 5), type: 'category' as const }
         } else if (card.type === 'subcategory') {
           const { data } = await supabase.from('subcategories').select('id, name, short_desc, desc').eq('id', card.id).single()
           if (!data) return null
-          const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').eq('subcategory_id', card.id).order('order_index', { ascending: true }).limit(5)
-          return { id: data.id, name: data.name, shortDesc: (data as any).short_desc ?? null, desc: (data as any).desc ?? null, thumbnails: imgs?.map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean) ?? [], type: 'subcategory' as const }
+          const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').eq('subcategory_id', card.id).order('order_index', { ascending: true }).limit(20)
+          return { id: data.id, name: data.name, shortDesc: (data as any).short_desc ?? null, desc: (data as any).desc ?? null, thumbnails: shuffleCopy((imgs ?? []).map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean)).slice(0, 5), type: 'subcategory' as const }
         } else if (card.type === 'collection') {
           const { data } = await supabase.from('collections').select('id, name, short_desc, desc').eq('id', card.id).single()
           if (!data) return null
-          const { data: junctionData } = await supabase.from('content_collections').select('content_id').eq('collection_id', card.id).limit(5)
+          const { data: junctionData } = await supabase.from('content_collections').select('content_id').eq('collection_id', card.id).limit(20)
           let thumbnails: string[] = []
           if (junctionData?.length) {
             const ids = junctionData.map((j: any) => j.content_id)
-            const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').in('id', ids).limit(5)
-            thumbnails = imgs?.map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean) ?? []
+            const { data: imgs } = await supabase.from('content').select('menu_thumbnail_url, image_url').in('id', ids).limit(20)
+            thumbnails = shuffleCopy((imgs ?? []).map((c: any) => c.menu_thumbnail_url ?? c.image_url).filter(Boolean)).slice(0, 5)
           }
           return { id: data.id, name: data.name, shortDesc: (data as any).short_desc ?? null, desc: (data as any).desc ?? null, thumbnails, type: 'collection' as const }
         }
