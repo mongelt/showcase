@@ -1,5 +1,20 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/admin", "destination": "/easter-egg.html" },
+    { "source": "/admin/:path*", "destination": "/easter-egg.html" },
+    { "source": "/wp-admin", "destination": "/easter-egg.html" },
+    { "source": "/wp-admin/:path*", "destination": "/easter-egg.html" },
+    { "source": "/login", "destination": "/easter-egg.html" },
+    { "source": "/wp-login.php", "destination": "/easter-egg.html" },
+    { "source": "/administrator", "destination": "/easter-egg.html" },
+    { "source": "/admin.php", "destination": "/easter-egg.html" },
+    { "source": "/user/login", "destination": "/easter-egg.html" },
+    { "source": "/signin", "destination": "/easter-egg.html" },
+    { "source": "/sign-in", "destination": "/easter-egg.html" },
+    { "source": "/cpanel", "destination": "/easter-egg.html" },
+    { "source": "/phpmyadmin", "destination": "/easter-egg.html" }
+  ]
 }

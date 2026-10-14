@@ -24,6 +24,20 @@ const NAMESPACES = ['http://www.w3.org/2000/svg'];
 // Endings of local file names that would otherwise look like domain endings ("styles.css").
 const FILE_TYPES = ['html', 'css', 'woff2', 'woff', 'ttf', 'otf', 'txt', 'svg', 'png', 'jpg', 'jpeg', 'webp', 'avif', 'gif', 'ico', 'js', 'mjs', 'json', 'md', 'xml', 'webmanifest'];
 
+// The easter-egg page, and the addresses that show it (set as rewrites in vercel.json).
+// ":path*" means "and anything below it".
+const EGG_PAGE = '/easter-egg.html';
+const EGG_ADDRESSES = [
+  '/admin', '/admin/:path*', '/wp-admin', '/wp-admin/:path*',
+  '/login', '/wp-login.php', '/administrator', '/admin.php', '/user/login',
+  '/signin', '/sign-in', '/cpanel', '/phpmyadmin',
+];
+// What the easter-egg page types, line by line, and the CSS animation that types each line.
+const EGG_LINES = [
+  { text: 'Not this time.', animation: 'type-1' },
+  { text: 'Just a plain HTML/CSS', animation: 'type-2' },
+];
+
 function filesIn(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
@@ -125,8 +139,10 @@ test('the election tile says "Electing the 120th Congress"', () => {
   assert.match(readPage(), />Electing the 120th Congress</);
 });
 
-test('the page tells phones to use their real width', () => {
-  assert.match(readPage(), /<meta name="viewport" content="width=device-width, initial-scale=1">/);
+test('every page tells phones to use their real width', () => {
+  for (const file of htmlFiles()) {
+    assert.match(read(file), /<meta name="viewport" content="width=device-width, initial-scale=1">/, `${relative(root, file)} has no viewport line`);
+  }
 });
 
 test('every local file the page refers to exists', () => {
@@ -155,4 +171,47 @@ test('every in-page reference in the drawings points to an element that exists',
       assert.ok(ids.has(ref.slice(1)), `${relative(root, file)} refers to #${ref.slice(1)}, which doesn't exist`);
     }
   }
+});
+
+// ---- The easter-egg page ----
+
+function readEgg() {
+  return read(join(site, EGG_PAGE.slice(1)));
+}
+
+test('every easter-egg address shows the easter-egg page', () => {
+  const rewrites = JSON.parse(read(join(root, 'vercel.json'))).rewrites ?? [];
+  const toEgg = rewrites.filter((r) => r.destination === EGG_PAGE).map((r) => r.source);
+  assert.deepEqual([...toEgg].sort(), [...EGG_ADDRESSES].sort());
+  for (const { destination } of rewrites) {
+    assert.ok(existsSync(join(site, destination)), `vercel.json points to a missing file: ${destination}`);
+  }
+});
+
+test('the easter-egg page types its two lines and gives screen readers the whole text', () => {
+  const html = readEgg();
+  for (const { text } of EGG_LINES) {
+    assert.ok(html.includes(`>${text}</span>`), `the typed line "${text}" is missing`);
+  }
+  const heading = html.match(/<h1\b[^>]*>([^<]*)<\/h1>/);
+  assert.ok(heading, 'the easter-egg page has no heading for screen readers');
+  assert.equal(heading[1], EGG_LINES.map((l) => l.text).join(' '));
+});
+
+test('each typing animation ends exactly at the end of its line', () => {
+  const css = read(join(site, 'easter-egg.css'));
+  for (const { text, animation } of EGG_LINES) {
+    const block = css.match(new RegExp(String.raw`@keyframes ${animation} \{([\s\S]*?)\n\}`));
+    assert.ok(block, `easter-egg.css has no @keyframes ${animation}`);
+    const widths = [...block[1].matchAll(/width: ([\d.]+)ch/g)].map((m) => Number(m[1]));
+    assert.equal(widths.at(-1), [...text].length, `${animation} should end at ${[...text].length}ch, the length of "${text}"`);
+  }
+});
+
+test('the easter-egg page asks search engines not to list it', () => {
+  assert.match(readEgg(), /<meta name="robots" content="noindex, nofollow">/);
+});
+
+test('the easter-egg page has no links', () => {
+  assert.doesNotMatch(readEgg(), /<a\b/i);
 });

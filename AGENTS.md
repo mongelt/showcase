@@ -39,10 +39,12 @@ Read before changing anything:
 | Path | What it is |
 |---|---|
 | `public/` | The website. **Only this folder is served** at mongelt.com (set in `vercel.json`). |
-| `public/index.html` | The page. |
-| `public/styles.css` | All styling. |
-| `public/fonts/` | The two fonts and their licenses. Fonts are served from here, never from Google. |
-| `tests/check-site.mjs` | Automatic checks of links, addresses, wording and files. |
+| `public/index.html` | The landing page. |
+| `public/styles.css` | The landing page's styling. |
+| `public/easter-egg.html`, `public/easter-egg.css` | The easter-egg page (see below). |
+| `public/fonts/` | The fonts and their licenses. Fonts are served from here, never from Google. |
+| `vercel.json` | Serves only `public/`, and lists the addresses that show the easter-egg page. |
+| `tests/check-site.mjs` | Automatic checks of links, addresses, wording, files and the easter-egg page. |
 | `docs/` | Design and spec. Public on GitHub, not served on the website. |
 
 ## Checks: run after every change to `public/`
@@ -54,6 +56,17 @@ Read before changing anything:
    - desktop sizes, a phone width, and a phone held sideways (the one-column layout applies at 820 pixels wide or less, and at 1000 wide or less when the window is 540 or less tall);
    - the browser's network log shows nothing loaded from outside servers;
    - nothing is cut off.
+
+## The easter-egg page
+
+A black terminal screen that types "Not this time.", leaves a blank line, then types "Just a plain HTML/CSS", with a blinking block cursor. It is a joke on visitors who try admin addresses, and the joke depends on it being true: **no JavaScript, ever**. The typing, blinking and line changes are all CSS animations.
+
+- **Addresses:** `/admin` and everything under it, `/wp-admin` and everything under it, `/login`, `/wp-login.php`, `/administrator`, `/admin.php`, `/user/login`, `/signin`, `/sign-in`, `/cpanel`, `/phpmyadmin`. They are rewrites in `vercel.json`: the visitor keeps seeing the address they typed. The same list is in `tests/check-site.mjs`; change both together.
+- **Links in the page start with `/`** (`/easter-egg.css`), because it is shown at nested addresses like `/wp-admin/x`, where a relative link would break.
+- **Timing and text** are described at the top of `public/easter-egg.css`. If a typed line changes, its `@keyframes` steps must be recomputed (the method is explained above them), and the text in `tests/check-site.mjs` updated; the checks fail if the last step doesn't match the line's length.
+- **Font:** IBM Plex Mono, IBM's own Latin subset from the `@ibm/plex-mono` package, unmodified. IBM reserves the name "Plex", so don't subset or modify the file yourself; use IBM's files.
+- **Preview locally** at `http://127.0.0.1:8765/easter-egg.html`. A local server doesn't apply the `vercel.json` rewrites, so check the addresses themselves on a Vercel preview link.
+- Search engines are asked not to list it, and it has no links.
 
 ## Adding a project tile later
 

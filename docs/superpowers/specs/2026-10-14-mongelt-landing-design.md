@@ -10,7 +10,8 @@
 - §3.2 change 5 (phones held sideways) was added;
 - two lines that hinted at a page belonging to the dashboard were made generic;
 - the owner removed the dashboard handoff from this repository (it belongs to the dashboard project), and references to it were updated;
-- the steps in §6 were completed on 2026-10-14 and the site went live; the DNS decision was added to §2.
+- the steps in §6 were completed on 2026-10-14 and the site went live; the DNS decision was added to §2;
+- §8, the easter-egg page, was added as a separate, owner-approved change.
 **Inputs:** `docs/visual-design.html` (the owner's design, made in Claude Design) and a handoff from the dashboard project. The handoff is not kept in this repository; the rules it set for this site are in §4 and in `AGENTS.md`.
 
 ---
@@ -154,3 +155,18 @@ Mistyped addresses on mongelt.com show Vercel's standard "not found" page.
 - Live numbers from the dashboard (that would need new work in the dashboard's repository).
 - Pages that belong to the dashboard.
 - A second project tile: the drawn tile is wider than its column, so a second one needs a design change first.
+
+## 8. Easter-egg page (added 2026-10-14, approved by the owner in chat)
+
+A page for visitors who try admin addresses on mongelt.com.
+
+| Topic | Decision |
+|---|---|
+| Look | Black screen, light gray text (`#e0e0e0`), IBM Plex Mono at 18 to 52 px depending on the window, a block cursor that blinks once a second and stays solid while typing. |
+| Text | Line 1: "Not this time." Line 2: blank. Line 3: "Just a plain HTML/CSS" (no period, as the owner wrote it). |
+| Timing | The cursor blinks alone for 6 s; line 1 is typed over 2.9 s, with a pause before the dot; the cursor drops to the blank line (1.25 s), then to line 3 (2.5 s); line 3 is typed over 2 s; then the cursor blinks after it indefinitely. |
+| Button or links | None. |
+| How | Plain HTML and CSS, no JavaScript, so the text is true. Typing is a CSS animation that widens each line one character at a time, with uneven steps for a human rhythm. |
+| Addresses | `/admin` and everything under it, `/wp-admin` and everything under it, `/login`, `/wp-login.php`, `/administrator`, `/admin.php`, `/user/login`, `/signin`, `/sign-in`, `/cpanel`, `/phpmyadmin`, all shown through rewrites in `vercel.json`, so the address bar keeps what the visitor typed. |
+| Font | IBM's own Latin subset of IBM Plex Mono (`@ibm/plex-mono` 2.5.0), served from the site. IBM reserves the name "Plex" under the font's license, so IBM's unmodified file is used rather than a third party's trimmed copy. |
+| Other | Search engines are asked not to list it. Visitors who ask for reduced motion see the finished text with a steady cursor. Screen readers get both sentences as the page heading. Not mentioned in the README. |
