@@ -67,6 +67,7 @@ A black terminal screen that types "Not this time.", leaves a blank line, then t
 - **Font:** IBM Plex Mono, IBM's own Latin subset from the `@ibm/plex-mono` package, unmodified. IBM reserves the name "Plex", so don't subset or modify the file yourself; use IBM's files.
 - **Preview locally** at `http://127.0.0.1:8765/easter-egg.html`. A local server doesn't apply the `vercel.json` rewrites, so check the addresses themselves on a Vercel preview link.
 - Search engines are asked not to list it, and it has no links.
+- Addresses match lowercase only (owner's choice): `/ADMIN` shows Vercel's "not found" page. Vercel rewrites have no ignore-case option.
 
 ## Adding a project tile later
 
