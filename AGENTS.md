@@ -69,6 +69,12 @@ A black terminal screen that types "Not this time.", leaves a blank line, then t
 - Search engines are asked not to list it, and it has no links.
 - Addresses match lowercase only (owner's choice): `/ADMIN` shows Vercel's "not found" page. Vercel rewrites have no ignore-case option.
 
+## The Capitol drawing (election tile)
+
+- **No SVG mask.** The Capitol's shapes are filled with the moving stripes directly (an SVG `<animateTransform>` on the gradient, no JavaScript), and its detail lines are painted in the page background color `#151514` on top. The original design used a striped rectangle moving behind a mask; in Google Chrome that mask was sometimes skipped for a single frame and the whole rectangle flashed (2026-10-15). A check in `tests/check-site.mjs` fails if a mask comes back.
+- Because the detail lines are painted in `#151514`, they only look like cut-outs on that background. If the page background ever changes, change their color too.
+- Reduced motion: `styles.css` switches the fill to `#capgrad-still`, a copy of the gradient without the animation.
+
 ## Adding a project tile later
 
 The drawn tile is deliberately wider than its column (`.tile { width: 112.5% }`), so a second tile placed next to it would overlap the first. A new tile needs a design change first; ask the owner.

@@ -13,7 +13,19 @@
 <a class="tile" href="https://26.mongelt.com">
 <svg class="cap-art" viewBox="60 50 880 392" preserveAspectRatio="xMinYMax meet" aria-hidden="true">
 <defs>
-<linearGradient id="capgrad" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="capgrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="2800" y2="0">
+<stop offset="0" stop-color="#4A7DC4"></stop>
+<stop offset="0.15" stop-color="#4A7DC4"></stop>
+<stop offset="0.25" stop-color="#C24B43"></stop>
+<stop offset="0.4" stop-color="#C24B43"></stop>
+<stop offset="0.5" stop-color="#4A7DC4"></stop>
+<stop offset="0.65" stop-color="#4A7DC4"></stop>
+<stop offset="0.75" stop-color="#C24B43"></stop>
+<stop offset="0.9" stop-color="#C24B43"></stop>
+<stop offset="1" stop-color="#4A7DC4"></stop>
+<animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="-1400 0" dur="26s" repeatCount="indefinite"></animateTransform>
+</linearGradient>
+<linearGradient id="capgrad-still" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="2800" y2="0">
 <stop offset="0" stop-color="#4A7DC4"></stop>
 <stop offset="0.15" stop-color="#4A7DC4"></stop>
 <stop offset="0.25" stop-color="#C24B43"></stop>
@@ -24,8 +36,9 @@
 <stop offset="0.9" stop-color="#C24B43"></stop>
 <stop offset="1" stop-color="#4A7DC4"></stop>
 </linearGradient>
-<mask id="capmask">
-<g fill="#ffffff">
+</defs>
+<!-- The Capitol is painted with moving stripes; its detail lines are painted in the page color on top. No mask: Chrome sometimes drew a frame without one. -->
+<g class="cap-body" fill="url(#capgrad)">
 <circle cx="500" cy="61" r="4"></circle>
 <rect x="497" y="64" width="6" height="20"></rect>
 <rect x="493" y="83" width="14" height="6"></rect>
@@ -55,7 +68,7 @@
 <rect x="300" y="424" width="400" height="6"></rect>
 <rect x="70" y="432" width="860" height="6"></rect>
 </g>
-<g fill="#000000">
+<g fill="#151514">
 <rect x="489.7" y="101" width="2.6" height="17"></rect>
 <rect x="495.7" y="101" width="2.6" height="17"></rect>
 <rect x="501.7" y="101" width="2.6" height="17"></rect>
@@ -116,15 +129,10 @@
 <rect x="641.9" y="334" width="5" height="62"></rect>
 <rect x="655.5" y="334" width="5" height="62"></rect>
 </g>
-<g fill="none" stroke="#000000" stroke-width="2.5">
+<g fill="none" stroke="#151514" stroke-width="2.5">
 <path d="M428 320 L500 302 L572 320"></path>
 <rect x="166" y="340" width="152" height="54"></rect>
 <rect x="682" y="340" width="152" height="54"></rect>
-</g>
-</mask>
-</defs>
-<g mask="url(#capmask)">
-<rect class="flow" x="0" y="40" width="2800" height="420" fill="url(#capgrad)"></rect>
 </g>
 </svg>
 <div class="stack">

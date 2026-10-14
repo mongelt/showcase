@@ -45,9 +45,8 @@ a:hover { color: inherit; }
 /* The drawn tile is wider than its column; a second tile needs a design change first. */
 .tile { display: flex; flex-direction: column; gap: 22px; width: 112.5%; }
 .tile:focus-visible, .banner:focus-visible { outline: 2px solid #E7E3DC; outline-offset: 6px; }
+/* The Capitol's stripes move by an SVG animation inside index.html (no JavaScript). */
 .cap-art { display: block; width: 100%; height: auto; max-height: 23.6vh; }
-.flow { animation: flow 26s linear infinite; }
-@keyframes flow { from { transform: translateX(0); } to { transform: translateX(-1400px); } }
 
 .stack { display: flex; flex-direction: column; gap: 12px; }
 .desc { margin: 0; font-size: 15px; line-height: 1.5; color: #A29D95; }
@@ -122,8 +121,9 @@ a:hover { color: inherit; }
   .mark { height: auto; }
 }
 
-/* Visitors who ask their device for less motion: stripes stop, hover moves are instant */
+/* Visitors who ask their device for less motion: stripes stop (painted with the still copy of
+   the stripes), hover moves are instant */
 @media (prefers-reduced-motion: reduce) {
-  .flow { animation: none; }
+  .cap-body { fill: url(#capgrad-still); }
   .lift, .arrow { transition: none; }
 }

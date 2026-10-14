@@ -227,3 +227,16 @@ test('the easter-egg page asks search engines not to list it', () => {
 test('the easter-egg page has no links', () => {
   assert.doesNotMatch(readEgg(), /<a\b/i);
 });
+
+// ---- The Capitol drawing on the election tile ----
+
+test('the Capitol drawing uses no SVG mask (Chrome sometimes drew a frame without it, so the stripes flashed)', () => {
+  assert.doesNotMatch(readPage(), /<mask\b|\smask\s*=/i);
+});
+
+test('every drawing pattern the stylesheet refers to exists in the page', () => {
+  const ids = new Set(attributeValues(readPage(), ['id']));
+  for (const ref of cssUrls(read(join(site, 'styles.css'))).filter((r) => r.startsWith('#'))) {
+    assert.ok(ids.has(ref.slice(1)), `styles.css refers to #${ref.slice(1)}, which index.html doesn't have`);
+  }
+});

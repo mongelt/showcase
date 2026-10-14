@@ -11,7 +11,8 @@
 - two lines that hinted at a page belonging to the dashboard were made generic;
 - the owner removed the dashboard handoff from this repository (it belongs to the dashboard project), and references to it were updated;
 - the steps in §6 were completed on 2026-10-14 and the site went live; the DNS decision was added to §2;
-- §8, the easter-egg page, was added as a separate, owner-approved change.
+- §8, the easter-egg page, was added as a separate, owner-approved change;
+- 2026-10-15: the Capitol drawing no longer uses an SVG mask (bug fix, see §3.2).
 **Inputs:** `docs/visual-design.html` (the owner's design, made in Claude Design) and a handoff from the dashboard project. The handoff is not kept in this repository; the rules it set for this site are in §4 and in `AGENTS.md`.
 
 ---
@@ -78,6 +79,7 @@ Built from the static, filled-in version of the design (the `data-dc-static` cop
 - **Dark full-screen page.** Background `#151514`, text `#E7E3DC`, secondary `#A29D95`, labels `#8C877F`, burgundy `#9C3B36`, light `#F1ECE4`.
 - **Top two-thirds: "Projects".** One tile, linking to `https://26.mongelt.com`.
   - The Capitol drawing, with blue `#4A7DC4` and red `#C24B43` stripes sliding through it (a 26-second loop).
+  - **How it is drawn (changed 2026-10-15):** the Capitol's shapes are painted with the stripes directly, and its detail lines are painted in the page color (`#151514`) on top. The stripes move by an SVG animation of the gradient (`<animateTransform>`, not JavaScript); visitors who ask for reduced motion get a still copy of the gradient. The design file drew it differently: a striped rectangle moving behind an SVG mask. That looks the same, but in Google Chrome 155 on the owner's Windows PC the mask was sometimes skipped for a single frame, so the whole rectangle of stripes flashed. Brave on the same PC did not show it. Old and new were compared frame by frame in Chrome, Firefox and WebKit; differences are limited to anti-aliasing on shape edges.
   - Title "Electing the 120th Congress", line "2026 Midterm Election Forecast and Dashboard", label "26.mongelt.com" with an arrow.
 - **Bottom third: the portfolio banner**, linking to `https://beregovskiy.com`. "Andrey Beregovskiy" (the page's only heading), "Personal portfolio", label "beregovskiy.com" with an arrow, and the stack of folder tabs with "FILE" on the front tab.
 - **Hover:** the arrows nudge up and right; the two front folder tabs lift.
