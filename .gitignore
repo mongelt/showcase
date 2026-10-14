@@ -1,0 +1,16 @@
+# Vercel's local project link and any tokens it writes (e.g. VERCEL_OIDC_TOKEN in .env.local)
+.vercel/
+.env*
+
+# Folders and files that some command-line tools (e.g. `vercel link`) drop into repositories
+.agents/
+.claude/skills/
+.claude/settings.local.json
+skills-lock.json
+
+# Browser-testing output (screenshots, page snapshots)
+.playwright-mcp/
+
+# Operating-system clutter
+.DS_Store
+Thumbs.db
