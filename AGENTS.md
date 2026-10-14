@@ -63,7 +63,7 @@ A black terminal screen that types "Not this time.", leaves a blank line, then t
 
 - **Addresses:** `/admin` and everything under it, `/wp-admin` and everything under it, `/login`, `/wp-login.php`, `/administrator`, `/admin.php`, `/user/login`, `/signin`, `/sign-in`, `/cpanel`, `/phpmyadmin`. They are rewrites in `vercel.json`: the visitor keeps seeing the address they typed. The same list is in `tests/check-site.mjs`; change both together.
 - **Links in the page start with `/`** (`/easter-egg.css`), because it is shown at nested addresses like `/wp-admin/x`, where a relative link would break.
-- **Timing and text** are described at the top of `public/easter-egg.css`. If a typed line changes, its `@keyframes` steps must be recomputed (the method is explained above them), and the text in `tests/check-site.mjs` updated; the checks fail if the last step doesn't match the line's length.
+- **Timing and text** are described at the top of `public/easter-egg.css`. If a typed line changes, its `@keyframes` steps must be recomputed (the method is explained above them; one step per letter, 0.6em each, in em not ch because of a Firefox quirk), and the text in `tests/check-site.mjs` updated; the checks fail if the steps don't match the line.
 - **Font:** IBM Plex Mono, IBM's own Latin subset from the `@ibm/plex-mono` package, unmodified. IBM reserves the name "Plex", so don't subset or modify the file yourself; use IBM's files.
 - **Preview locally** at `http://127.0.0.1:8765/easter-egg.html`. A local server doesn't apply the `vercel.json` rewrites, so check the addresses themselves on a Vercel preview link.
 - Search engines are asked not to list it, and it has no links.

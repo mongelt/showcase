@@ -42,12 +42,15 @@ html, body { margin: 0; height: 100%; background: #000; }
   padding: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }
 
-/* Typed text: revealed one character (1ch) at a time. Every character of the font is
-   exactly 1ch wide, so each step shows one more letter. */
+/* Typed text: revealed one letter at a time. Every character of IBM Plex Mono is exactly
+   0.6em wide (600 of its 1000 units), so each step widens the line by 0.6em. The steps use em,
+   not ch: Firefox works out ch with the stand-in font from before the web font loads and
+   doesn't update it, which would cut letters in half. */
 .typed { display: inline-block; vertical-align: top; overflow: hidden; width: 0; }
 .typed-1 { animation: type-1 2.9s step-end 6s forwards; }
 .typed-2 { animation: type-2 2s step-end 12.65s forwards; }
@@ -56,48 +59,48 @@ html, body { margin: 0; height: 100%; background: #000; }
    rhythm: every character gets a weight (a space 1.5, the dot in line 1 a slow 5, any other
    character 0.7 + ((i * 37 + code * 11) mod 9) / 10, where i is its position and code its
    character code), and a step's time is the running total of weights as a share of the whole.
-   If the text changes, recompute these; tests/check-site.mjs checks that the last step
-   matches the length of the line. */
+   If the text changes, recompute these; tests/check-site.mjs checks that there is one step
+   per letter, in order, ending at the full length of the line. */
 @keyframes type-1 {
-  0% { width: 0ch; }
-  5% { width: 1ch; }
-  12% { width: 2ch; }
-  15.5% { width: 3ch; }
-  23% { width: 4ch; }
-  27.5% { width: 5ch; }
-  34% { width: 6ch; }
-  37.5% { width: 7ch; }
-  42.5% { width: 8ch; }
-  50% { width: 9ch; }
-  57% { width: 10ch; }
-  62.5% { width: 11ch; }
-  68% { width: 12ch; }
-  75% { width: 13ch; }
-  100% { width: 14ch; }
+  0% { width: 0em; }
+  5% { width: 0.6em; }
+  12% { width: 1.2em; }
+  15.5% { width: 1.8em; }
+  23% { width: 2.4em; }
+  27.5% { width: 3em; }
+  34% { width: 3.6em; }
+  37.5% { width: 4.2em; }
+  42.5% { width: 4.8em; }
+  50% { width: 5.4em; }
+  57% { width: 6em; }
+  62.5% { width: 6.6em; }
+  68% { width: 7.2em; }
+  75% { width: 7.8em; }
+  100% { width: 8.4em; }
 }
 @keyframes type-2 {
-  0% { width: 0ch; }
-  4.31% { width: 1ch; }
-  7.45% { width: 2ch; }
-  12.94% { width: 3ch; }
-  16.08% { width: 4ch; }
-  21.96% { width: 5ch; }
-  25.1% { width: 6ch; }
-  30.98% { width: 7ch; }
-  36.08% { width: 8ch; }
-  41.96% { width: 9ch; }
-  46.67% { width: 10ch; }
-  50.98% { width: 11ch; }
-  56.08% { width: 12ch; }
-  61.96% { width: 13ch; }
-  66.27% { width: 14ch; }
-  69.8% { width: 15ch; }
-  75.29% { width: 16ch; }
-  80.39% { width: 17ch; }
-  84.31% { width: 18ch; }
-  90.2% { width: 19ch; }
-  94.9% { width: 20ch; }
-  100% { width: 21ch; }
+  0% { width: 0em; }
+  4.31% { width: 0.6em; }
+  7.45% { width: 1.2em; }
+  12.94% { width: 1.8em; }
+  16.08% { width: 2.4em; }
+  21.96% { width: 3em; }
+  25.1% { width: 3.6em; }
+  30.98% { width: 4.2em; }
+  36.08% { width: 4.8em; }
+  41.96% { width: 5.4em; }
+  46.67% { width: 6em; }
+  50.98% { width: 6.6em; }
+  56.08% { width: 7.2em; }
+  61.96% { width: 7.8em; }
+  66.27% { width: 8.4em; }
+  69.8% { width: 9em; }
+  75.29% { width: 9.6em; }
+  80.39% { width: 10.2em; }
+  84.31% { width: 10.8em; }
+  90.2% { width: 11.4em; }
+  94.9% { width: 12em; }
+  100% { width: 12.6em; }
 }
 
 /* The block cursor. There is one per line; each is shown only while the cursor is on its line. */

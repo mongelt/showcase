@@ -200,14 +200,24 @@ test('the easter-egg page types its two lines and gives screen readers the whole
   assert.equal(heading[1], EGG_LINES.map((l) => l.text).join(' '));
 });
 
-test('each typing animation ends exactly at the end of its line', () => {
+test('each typing animation reveals its line one whole letter per step, in order', () => {
   const css = read(join(site, 'easter-egg.css'));
-  for (const { text, animation } of EGG_LINES) {
+  // One letter of IBM Plex Mono is exactly 0.6em wide. Steps are in em, not ch: Firefox keeps
+  // ch values worked out with the stand-in font from before the web font loaded.
+  const letter = 0.6;
+  EGG_LINES.forEach(({ text, animation }, i) => {
+    const uses = css.match(new RegExp(String.raw`\.typed-${i + 1} \{ animation: (\S+) `));
+    assert.equal(uses?.[1], animation, `.typed-${i + 1} should use @keyframes ${animation}`);
     const block = css.match(new RegExp(String.raw`@keyframes ${animation} \{([\s\S]*?)\n\}`));
     assert.ok(block, `easter-egg.css has no @keyframes ${animation}`);
-    const widths = [...block[1].matchAll(/width: ([\d.]+)ch/g)].map((m) => Number(m[1]));
-    assert.equal(widths.at(-1), [...text].length, `${animation} should end at ${[...text].length}ch, the length of "${text}"`);
-  }
+    const steps = [...block[1].matchAll(/([\d.]+)% \{ width: ([\d.]+)em; \}/g)].map((m) => ({ at: Number(m[1]), width: Number(m[2]) }));
+    const letters = [...text].length;
+    const expected = Array.from({ length: letters + 1 }, (_, k) => Number((k * letter).toFixed(1)));
+    assert.deepEqual(steps.map((s) => s.width), expected, `${animation} should widen by one letter (0.6em) per step, from 0 to all ${letters} letters of "${text}"`);
+    assert.equal(steps[0].at, 0, `${animation} should start at 0%`);
+    assert.equal(steps.at(-1).at, 100, `${animation} should end at 100%`);
+    steps.slice(1).forEach((s, k) => assert.ok(s.at > steps[k].at, `${animation}: step ${k + 1} is not later than step ${k}`));
+  });
 });
 
 test('the easter-egg page asks search engines not to list it', () => {
