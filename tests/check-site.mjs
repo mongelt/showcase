@@ -180,7 +180,9 @@ function readEgg() {
 }
 
 test('every easter-egg address shows the easter-egg page', () => {
-  const rewrites = JSON.parse(read(join(root, 'vercel.json'))).rewrites ?? [];
+  const config = JSON.parse(read(join(root, 'vercel.json')));
+  assert.equal(config.trailingSlash, false, 'vercel.json needs "trailingSlash": false, so /admin/ and /login/ forward to /admin and /login');
+  const rewrites = config.rewrites ?? [];
   const toEgg = rewrites.filter((r) => r.destination === EGG_PAGE).map((r) => r.source);
   assert.deepEqual([...toEgg].sort(), [...EGG_ADDRESSES].sort());
   for (const { destination } of rewrites) {
