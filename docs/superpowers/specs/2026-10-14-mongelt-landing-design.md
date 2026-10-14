@@ -9,7 +9,8 @@
 - the list of automatic checks in §5 grew after the review;
 - §3.2 change 5 (phones held sideways) was added;
 - two lines that hinted at a page belonging to the dashboard were made generic;
-- the owner removed the dashboard handoff from this repository (it belongs to the dashboard project), and references to it were updated.
+- the owner removed the dashboard handoff from this repository (it belongs to the dashboard project), and references to it were updated;
+- the steps in §6 were completed on 2026-10-14 and the site went live; the DNS decision was added to §2.
 **Inputs:** `docs/visual-design.html` (the owner's design, made in Claude Design) and a handoff from the dashboard project. The handoff is not kept in this repository; the rules it set for this site are in §4 and in `AGENTS.md`.
 
 ---
@@ -40,6 +41,7 @@ The page is expected to stay as it is for at least a few months. New project til
 | Repository | `Mongelt-Showcase` locally, `mongelt/showcase` on GitHub, **public**. |
 | AI instructions | `AGENTS.md` holds the rules; `CLAUDE.md` is one line that points to it. |
 | Hosting | A new Vercel project named `showcase`, in the owner's existing Vercel account. |
+| Domain registration and DNS | Stay at Namecheap for now (decided after launch). Moving them to Vercel is possible later, but Namecheap's free email forwarding for mongelt.com only works with Namecheap's DNS, so a replacement must be in place first. |
 | Pages that belong to the dashboard | Not this repository's job. |
 
 **Repository name note (checked 2026-10-14):** `mongelt/showcase` is the old name of `mongelt/file`, and GitHub still forwards the old name to it. Creating the new repository ends that forwarding. Nothing was found that relies on it: no local clone points at the old name, no file in the related repositories mentions it, the live portfolio has no GitHub links, and Vercel's portfolio project is linked to `mongelt/file` by an ID number, not by name.

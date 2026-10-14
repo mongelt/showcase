@@ -27,7 +27,7 @@ The checks confirm that the page links only to its two sites, loads nothing from
 
 ## Deploy
 
-Planned hosting: Vercel. Every push to `main` will go live, and other branches will get preview links. Only the `public/` folder is served (see `vercel.json`). As of 2026-10-14 the site is not connected yet.
+Hosted on Vercel. Every push to `main` goes live at https://mongelt.com, and other branches get preview links. Only the `public/` folder is served (see `vercel.json`).
 
 ## Credits
 

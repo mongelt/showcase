@@ -61,6 +61,6 @@ The drawn tile is deliberately wider than its column (`.tile { width: 112.5% }`)
 
 ## How the site goes live
 
-The intended setup (spec §6): `main` is the live site. Vercel deploys every push to `main` automatically and gives every other branch its own preview link. Make changes on a branch, show the owner the preview, and merge only with the owner's OK.
+`main` is the live site at https://mongelt.com, served by the Vercel project `showcase`, which is connected to the GitHub repository `mongelt/showcase`. Vercel deploys every push to `main` automatically and gives every other branch its own preview link; preview links need the owner's Vercel login. Make changes on a branch, show the owner the preview, and merge only with the owner's OK.
 
-**Status on 2026-10-14:** not connected yet. There is no GitHub repository, Vercel project or DNS record for this site yet. Each of those steps waits for the owner's OK. Update this line when they are done.
+DNS stays at Namecheap for now (owner, 2026-10-14). The site uses two records there: an A record for `@` and a CNAME for `www`, both pointing to Vercel with the values shown in the project's Domains settings. `www.mongelt.com` forwards to `mongelt.com`.
